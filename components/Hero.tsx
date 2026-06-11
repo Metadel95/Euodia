@@ -75,7 +75,7 @@ export default function Hero() {
       <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto w-full">
         {/* Logo */}
         <motion.div
-          initial={{ opacity: 0, y: -16 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
           className="mb-12"
@@ -85,7 +85,7 @@ export default function Hero() {
 
         {/* Eyebrow */}
         <motion.span
-          initial={{ opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.5 }}
           className="font-sans text-xs tracking-widest uppercase text-accent-light mb-6 block"
@@ -95,7 +95,7 @@ export default function Hero() {
 
         {/* Headline */}
         <motion.h1
-          initial={{ opacity: 0, y: 24 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.6 }}
           className="font-serif font-light text-white leading-tight mb-6"
@@ -108,7 +108,7 @@ export default function Hero() {
 
         {/* Subheadline */}
         <motion.p
-          initial={{ opacity: 0, y: 16 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.85 }}
           className="font-sans font-light text-white/70 text-base md:text-lg leading-relaxed max-w-2xl mb-12"
@@ -119,7 +119,7 @@ export default function Hero() {
 
         {/* Buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 1.1 }}
           className="flex flex-col sm:flex-row gap-4 items-center"
@@ -145,7 +145,7 @@ export default function Hero() {
       <motion.button
         onClick={scrollToMeaning}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-white/50 hover:text-white/80 transition-colors duration-300"
-        initial={{ opacity: 0 }}
+        initial={false}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.8, duration: 0.8 }}
         aria-label="Scroll down"
