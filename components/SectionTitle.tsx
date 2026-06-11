@@ -1,59 +1,68 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+
 interface SectionTitleProps {
   eyebrow?: string;
   heading: string;
   subheading?: string;
-  align?: "left" | "center";
+  align?: "left" | "center" | "right";
   light?: boolean;
+  className?: string;
 }
 
 export default function SectionTitle({
   eyebrow,
   heading,
   subheading,
-  align = "left",
+  align = "center",
   light = false,
+  className,
 }: SectionTitleProps) {
-  const center = align === "center";
+  const alignClass = {
+    left: "text-left items-start",
+    center: "text-center items-center",
+    right: "text-right items-end",
+  }[align];
 
   return (
-    <div className={`flex flex-col gap-4 ${center ? "items-center text-center" : "items-start"}`}>
+    <motion.div
+      className={cn("flex flex-col gap-4", alignClass, className)}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+    >
       {eyebrow && (
-        <div className={`flex items-center gap-3 ${center ? "justify-center" : ""}`}>
-          <span
-            className={`divider-gold ${center ? "" : ""}`}
-            aria-hidden="true"
-          />
-          <span
-            className={`font-sans text-caption tracking-editorial uppercase ${
-              light ? "text-gold/70" : "text-gold"
-            }`}
-          >
-            {eyebrow}
-          </span>
-        </div>
+        <span
+          className={cn(
+            "font-sans text-xs tracking-widest uppercase",
+            light ? "text-accent-light" : "text-accent"
+          )}
+        >
+          {eyebrow}
+        </span>
       )}
       <h2
-        className={`font-display font-light leading-none ${
-          light ? "text-parchment" : "text-ink"
-        }`}
-        style={{
-          fontSize: "clamp(2.2rem, 4.5vw, 3.8rem)",
-          letterSpacing: "-0.02em",
-          lineHeight: "1.05",
-        }}
+        className={cn(
+          "font-serif font-light leading-tight",
+          "text-4xl md:text-5xl lg:text-6xl",
+          light ? "text-white" : "text-foreground"
+        )}
       >
         {heading}
       </h2>
       {subheading && (
         <p
-          className={`font-sans font-light max-w-lg ${
-            light ? "text-parchment/55" : "text-muted"
-          }`}
-          style={{ fontSize: "clamp(0.9rem, 1.5vw, 1rem)", lineHeight: "1.75" }}
+          className={cn(
+            "font-sans font-light text-base md:text-lg max-w-2xl leading-relaxed",
+            light ? "text-white/70" : "text-muted"
+          )}
         >
           {subheading}
         </p>
       )}
-    </div>
+    </motion.div>
   );
 }

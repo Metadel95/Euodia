@@ -1,255 +1,162 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+const LOGO_URL = "https://res.cloudinary.com/dgxqifwdf/image/upload/v1781176122/Artboard_8_4x_ql3h3l.png";
 
 export default function Hero() {
-  const [ready, setReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setReady(true), 80);
-    return () => clearTimeout(t);
+    const video = videoRef.current;
+    if (!video) return;
+    video.play().catch(() => {
+      // Autoplay blocked — that's fine, the poster/overlay still shows
+    });
   }, []);
+
+  const scrollToMeaning = () => {
+    document.getElementById("meaning")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const scrollToJourney = () => {
+    document.getElementById("journey")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <section
       id="hero"
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "100svh",
-        minHeight: 600,
-        overflow: "hidden",
-        background: "var(--void)",
-        display: "flex",
-        flexDirection: "column",
-      }}
-      aria-label="Hero"
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
+      aria-label="Hero section"
     >
-      {/* ── Video ── */}
-      <video
-        ref={videoRef}
-        autoPlay
-        loop
-        muted
-        playsInline
-        poster="/images/hero-poster.jpg"
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          opacity: ready ? 1 : 0,
-          transition: "opacity 1.8s ease",
-        }}
-      >
-        <source src="/videos/hero.webm" type="video/webm" />
-        <source src="/videos/hero.mp4"  type="video/mp4" />
-      </video>
+      {/* Video background */}
+      <div className="absolute inset-0 z-0">
+        <video
+          ref={videoRef}
+          className={`w-full h-full object-cover transition-opacity duration-1000 ${
+            videoLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          poster="/hero-poster.jpg"
+          onCanPlay={() => setVideoLoaded(true)}
+          aria-hidden="true"
+        >
+          <source src="/hero-video.mp4" type="video/mp4" />
+        </video>
+        {/* Fallback gradient when video isn't loaded */}
+        <AnimatePresence>
+          {!videoLoaded && (
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-900"
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1 }}
+            />
+          )}
+        </AnimatePresence>
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/55" />
+        {/* Subtle vignette */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%)",
+          }}
+        />
+      </div>
 
-      {/* ── Overlay ── */}
-      <div className="video-overlay" style={{ position: "absolute", inset: 0 }} aria-hidden="true" />
-
-      {/* ── Top hairline ── */}
-      <div style={{
-        position: "absolute",
-        top: 60,
-        left: 40, right: 40,
-        height: 1,
-        background: "rgba(199,160,108,0.15)",
-      }} aria-hidden="true" />
-
-      {/* ── Content ── */}
-      <div style={{
-        position: "relative",
-        zIndex: 10,
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-end",
-        padding: "0 40px 60px",
-        maxWidth: 1280,
-        margin: "0 auto",
-        width: "100%",
-        alignSelf: "center",
-      }}>
+      {/* Content */}
+      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto w-full">
+        {/* Logo */}
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+          className="mb-12"
+        >
+          <img src={LOGO_URL} alt="Euodia logo" className="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-lg" />
+        </motion.div>
 
         {/* Eyebrow */}
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 16,
-          marginBottom: 28,
-          opacity: ready ? 1 : 0,
-          transform: ready ? "none" : "translateY(12px)",
-          transition: "opacity 0.9s ease 0.2s, transform 0.9s ease 0.2s",
-        }}>
-          <span style={{ display: "block", width: 28, height: 1, background: "var(--gold)" }} aria-hidden="true" />
-          <span style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 10,
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            color: "rgba(199,160,108,0.8)",
-          }}>
-            Worship Collective · Est. 2024
-          </span>
-        </div>
-
-        {/* ── MASSIVE headline — the juanmora signature ── */}
-        <div
-          aria-label="Spreading the Fragrance of Christ Through Music and Worship"
-          style={{ overflow: "hidden" }}
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="font-sans text-xs tracking-widest uppercase text-accent-light mb-6 block"
         >
-          {/* Line 1 */}
-          <div style={{ overflow: "hidden", marginBottom: "-0.04em" }}>
-            <h1
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 300,
-                fontStyle: "italic",
-                fontSize: "clamp(4rem, 11vw, 10.5rem)",
-                lineHeight: 0.92,
-                letterSpacing: "-0.025em",
-                color: "var(--parchment)",
-                opacity: ready ? 1 : 0,
-                transform: ready ? "translateY(0)" : "translateY(100%)",
-                transition: "opacity 1s cubic-bezier(0.16,1,0.3,1) 0.35s, transform 1s cubic-bezier(0.16,1,0.3,1) 0.35s",
-                display: "block",
-              }}
-            >
-              Spreading the
-            </h1>
-          </div>
+          A Worship Collective
+        </motion.span>
 
-          {/* Line 2 — gold */}
-          <div style={{ overflow: "hidden", marginBottom: "-0.04em" }}>
-            <span
-              style={{
-                display: "block",
-                fontFamily: "var(--font-display)",
-                fontWeight: 300,
-                fontSize: "clamp(4rem, 11vw, 10.5rem)",
-                lineHeight: 0.92,
-                letterSpacing: "-0.025em",
-                color: "var(--gold)",
-                opacity: ready ? 1 : 0,
-                transform: ready ? "translateY(0)" : "translateY(100%)",
-                transition: "opacity 1s cubic-bezier(0.16,1,0.3,1) 0.5s, transform 1s cubic-bezier(0.16,1,0.3,1) 0.5s",
-              }}
-            >
-              Fragrance
-            </span>
-          </div>
+        {/* Headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.6 }}
+          className="font-serif font-light text-white leading-tight mb-6"
+          style={{ fontSize: "clamp(2.2rem, 5vw, 4.5rem)" }}
+        >
+          Spreading the Fragrance of{" "}
+          <em className="not-italic text-accent-light">Christ</em> Through Music
+          and Worship
+        </motion.h1>
 
-          {/* Line 3 */}
-          <div style={{ overflow: "hidden" }}>
-            <span
-              style={{
-                display: "block",
-                fontFamily: "var(--font-display)",
-                fontWeight: 300,
-                fontStyle: "italic",
-                fontSize: "clamp(3rem, 8.5vw, 8rem)",
-                lineHeight: 0.95,
-                letterSpacing: "-0.02em",
-                color: "rgba(248,245,239,0.45)",
-                opacity: ready ? 1 : 0,
-                transform: ready ? "translateY(0)" : "translateY(100%)",
-                transition: "opacity 1s cubic-bezier(0.16,1,0.3,1) 0.65s, transform 1s cubic-bezier(0.16,1,0.3,1) 0.65s",
-              }}
-            >
-              of Christ
-            </span>
-          </div>
-        </div>
+        {/* Subheadline */}
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.85 }}
+          className="font-sans font-light text-white/70 text-base md:text-lg leading-relaxed max-w-2xl mb-12"
+        >
+          Euodia is a worship collective devoted to sharing the beauty of Christ
+          through music, community, and worship.
+        </motion.p>
 
-        {/* ── Bottom row: subtext + buttons ── */}
-        <div style={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "flex-end",
-          justifyContent: "space-between",
-          gap: 24,
-          marginTop: 48,
-          paddingTop: 28,
-          borderTop: "1px solid rgba(199,160,108,0.15)",
-          opacity: ready ? 1 : 0,
-          transform: ready ? "none" : "translateY(16px)",
-          transition: "opacity 0.9s ease 0.9s, transform 0.9s ease 0.9s",
-        }}>
-          <p style={{
-            fontFamily: "var(--font-sans)",
-            fontWeight: 300,
-            fontSize: "clamp(0.85rem, 1.4vw, 0.95rem)",
-            lineHeight: 1.7,
-            color: "rgba(248,245,239,0.45)",
-            maxWidth: 380,
-          }}>
-            A worship collective devoted to sharing the beauty of Christ through
-            music, community, and worship.
-          </p>
-
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <button
-              className="btn btn-primary"
-              onClick={() => document.getElementById("cta")?.scrollIntoView({ behavior: "smooth" })}
-              aria-label="Join the journey"
-            >
-              Join the Journey
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                <path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-            <button
-              className="btn btn-outline"
-              onClick={() => document.getElementById("meaning")?.scrollIntoView({ behavior: "smooth" })}
-              aria-label="Learn our story"
-            >
-              Our Story
-            </button>
-          </div>
-        </div>
+        {/* Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 1.1 }}
+          className="flex flex-col sm:flex-row gap-4 items-center"
+        >
+          <button
+            onClick={scrollToJourney}
+            className="group relative px-8 py-3.5 bg-accent text-white font-sans text-sm tracking-wider uppercase hover:bg-accent-dark transition-colors duration-300 min-w-[180px]"
+            aria-label="Join the Journey — scroll to join section"
+          >
+            Join the Journey
+          </button>
+          <button
+            onClick={scrollToMeaning}
+            className="px-8 py-3.5 border border-white/40 text-white font-sans text-sm tracking-wider uppercase hover:border-white/80 hover:bg-white/5 transition-all duration-300 min-w-[180px]"
+            aria-label="Learn Our Story — scroll to about section"
+          >
+            Learn Our Story
+          </button>
+        </motion.div>
       </div>
 
-      {/* ── Bottom gradient into page ── */}
-      <div style={{
-        position: "absolute",
-        bottom: 0, left: 0, right: 0,
-        height: 120,
-        background: "linear-gradient(to bottom, transparent, var(--void))",
-      }} aria-hidden="true" />
-
-      {/* ── Scroll hint ── */}
-      <div style={{
-        position: "absolute",
-        bottom: 32,
-        right: 40,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 8,
-        opacity: ready ? 0.4 : 0,
-        transition: "opacity 0.8s ease 1.5s",
-      }} aria-hidden="true">
-        <span style={{
-          fontFamily: "var(--font-mono)",
-          fontSize: 9,
-          letterSpacing: "0.2em",
-          textTransform: "uppercase",
-          color: "var(--parchment)",
-          writingMode: "vertical-rl",
-        }}>
-          scroll
-        </span>
-        <div style={{
-          width: 1,
-          height: 48,
-          background: "linear-gradient(to bottom, var(--gold), transparent)",
-        }} />
-      </div>
+      {/* Scroll indicator */}
+      <motion.button
+        onClick={scrollToMeaning}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-white/50 hover:text-white/80 transition-colors duration-300"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.8, duration: 0.8 }}
+        aria-label="Scroll down"
+      >
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+        >
+          <ChevronDown size={24} strokeWidth={1.5} />
+        </motion.div>
+      </motion.button>
     </section>
   );
 }

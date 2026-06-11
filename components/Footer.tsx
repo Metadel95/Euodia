@@ -1,73 +1,80 @@
 "use client";
 
+import { motion } from "framer-motion";
+import { Instagram, Youtube, Mail } from "lucide-react";
+import { SOCIAL_LINKS } from "@/lib/utils";
+
+const LOGO_URL = "https://res.cloudinary.com/dgxqifwdf/image/upload/v1781176122/Artboard_8_4x_ql3h3l.png";
+
+const socialLinks = [
+  { label: "Instagram", href: SOCIAL_LINKS.instagram, icon: Instagram },
+  { label: "YouTube", href: SOCIAL_LINKS.youtube, icon: Youtube },
+  { label: "Email", href: SOCIAL_LINKS.email, icon: Mail },
+];
+
 export default function Footer() {
   const year = new Date().getFullYear();
+
   return (
-    <footer style={{ background: "var(--void)", padding: "40px 0 48px" }}>
-      <div style={{
-        maxWidth: 1280, margin: "0 auto", padding: "0 40px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        flexWrap: "wrap",
-        gap: 16,
-      }}>
-        {/* Logo */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <span style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "1.1rem",
-            color: "var(--gold)",
-            opacity: 0.8,
-          }} aria-hidden="true">☧</span>
-          <span style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 10,
-            letterSpacing: "0.28em",
-            textTransform: "uppercase",
-            color: "rgba(248,245,239,0.3)",
-          }}>Euodia</span>
-        </div>
+    <footer
+      className="bg-background border-t border-foreground/8 py-12 px-6"
+      aria-label="Site footer"
+    >
+      <div className="max-w-6xl mx-auto flex flex-col items-center gap-8">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="flex flex-col items-center gap-2"
+        >
+          <img
+            src={LOGO_URL}
+            alt="Euodia"
+            className="w-12 h-12 object-contain"
+          />
+          <span className="font-serif tracking-widest uppercase text-sm font-light text-foreground">
+            Euodia
+          </span>
+        </motion.div>
 
-        {/* Center */}
-        <p style={{
-          fontFamily: "var(--font-mono)",
-          fontSize: 9,
-          letterSpacing: "0.16em",
-          textTransform: "uppercase",
-          color: "rgba(248,245,239,0.18)",
-        }}>
-          Made with devotion · © {year}
-        </p>
-
-        {/* Social */}
-        <div style={{ display: "flex", gap: 28 }}>
-          {[
-            { label: "Ig", href: "https://instagram.com/euodiaworship" },
-            { label: "Yt", href: "https://youtube.com/@euodiaworship" },
-            { label: "Em", href: "mailto:hello@euodia.co" },
-          ].map(({ label, href }) => (
+        <motion.nav
+          aria-label="Social media links"
+          className="flex items-center gap-6"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+        >
+          {socialLinks.map(({ label, href, icon: Icon }) => (
             <a
               key={label}
               href={href}
               target={href.startsWith("http") ? "_blank" : undefined}
               rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 9,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: "rgba(248,245,239,0.22)",
-                textDecoration: "none",
-                transition: "color 0.3s",
-              }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--gold)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(248,245,239,0.22)"; }}
+              aria-label={`Follow Euodia on ${label}`}
+              className="text-muted hover:text-accent transition-colors duration-300"
             >
-              {label}
+              <Icon size={18} strokeWidth={1.5} />
             </a>
           ))}
-        </div>
+        </motion.nav>
+
+        <motion.div
+          className="flex flex-col sm:flex-row items-center gap-2 text-center"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+        >
+          <p className="font-sans text-xs text-muted">
+            &copy; {year} Euodia. All rights reserved.
+          </p>
+          <span className="hidden sm:inline text-muted/40 text-xs">·</span>
+          <p className="font-sans text-xs text-muted/60 font-light italic">
+            Made with devotion.
+          </p>
+        </motion.div>
       </div>
     </footer>
   );
