@@ -1,137 +1,176 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Instagram, Youtube, Mail } from "lucide-react";
-import SectionTitle from "./SectionTitle";
 
 const socials = [
-  {
-    label: "Instagram",
-    href: "https://instagram.com/euodiaworship",
-    icon: Instagram,
-    description: "Follow our journey on Instagram",
-  },
-  {
-    label: "YouTube",
-    href: "https://youtube.com/@euodiaworship",
-    icon: Youtube,
-    description: "Watch worship sessions on YouTube",
-  },
-  {
-    label: "Email",
-    href: "mailto:hello@euodia.co",
-    icon: Mail,
-    description: "Get in touch by email",
-  },
+  { label: "Instagram", href: "https://instagram.com/euodiaworship" },
+  { label: "YouTube",   href: "https://youtube.com/@euodiaworship" },
+  { label: "Email",     href: "mailto:hello@euodia.co" },
 ];
 
 export default function CTA() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-          }
-        });
-      },
-      { threshold: 0.2 }
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("in"); }),
+      { threshold: 0.1 }
     );
-
-    sectionRef.current?.querySelectorAll(".reveal, .reveal-child, .line-reveal").forEach((el) => {
-      observer.observe(el);
-    });
-
-    return () => observer.disconnect();
+    ref.current?.querySelectorAll(".reveal, .line-grow").forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
   }, []);
 
   return (
     <section
       id="cta"
-      ref={sectionRef}
-      className="py-28 md:py-40 bg-void relative overflow-hidden"
+      ref={ref}
+      style={{ background: "var(--void)", padding: "120px 0" }}
       aria-labelledby="cta-heading"
     >
-      {/* Subtle background decoration */}
-      <div className="absolute inset-0 opacity-[0.03]" aria-hidden="true">
-        <svg viewBox="0 0 800 800" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl">
-          <circle cx="400" cy="400" r="380" stroke="#C7A06C" strokeWidth="1" fill="none" />
-          <circle cx="400" cy="400" r="300" stroke="#C7A06C" strokeWidth="0.75" fill="none" />
-          <circle cx="400" cy="400" r="220" stroke="#C7A06C" strokeWidth="0.5" fill="none" />
-        </svg>
-      </div>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 40px" }}>
 
-      <div className="relative z-10 max-w-3xl mx-auto px-6 text-center flex flex-col items-center">
-
-        {/* Eyebrow */}
-        <div className="reveal mb-10 flex items-center gap-3">
-          <span className="divider-gold opacity-60" aria-hidden="true" />
-          <span className="font-sans text-caption tracking-editorial uppercase text-gold/70">
-            The Journey
+        {/* Label row */}
+        <div style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "baseline",
+          marginBottom: 80,
+          flexWrap: "wrap",
+          gap: 16,
+        }}>
+          <span className="reveal" style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 10,
+            letterSpacing: "0.22em",
+            textTransform: "uppercase",
+            color: "rgba(199,160,108,0.6)",
+          }}>
+            02 — Community
           </span>
-          <span className="divider-gold opacity-60" aria-hidden="true" />
         </div>
 
-        {/* Heading */}
-        <div className="reveal mb-6">
-          <h2
-            id="cta-heading"
-            className="font-display text-parchment font-light leading-none"
-            style={{
-              fontSize: "clamp(2.4rem, 6vw, 4.8rem)",
-              letterSpacing: "-0.025em",
-              lineHeight: "1.05",
-            }}
-          >
-            Join Us on{" "}
-            <em className="text-gold/85 italic font-light">the Journey</em>
-          </h2>
-        </div>
-
-        {/* Body */}
-        <p
-          className="reveal font-sans text-parchment/45 font-light max-w-md mx-auto mb-14"
-          style={{ fontSize: "clamp(0.9rem, 1.5vw, 1rem)", lineHeight: "1.8" }}
-        >
-          Follow Euodia for a journey of worship and devotion, where music and
-          faith blend to create a beautiful fragrance of praise.
-        </p>
-
-        {/* Social buttons */}
-        <div className="reveal-child flex flex-col sm:flex-row items-center gap-4">
-          {socials.map(({ label, href, icon: Icon, description }) => (
-            <a
-              key={label}
-              href={href}
-              target={label !== "Email" ? "_blank" : undefined}
-              rel={label !== "Email" ? "noopener noreferrer" : undefined}
-              aria-label={description}
-              className={`btn-gold group flex items-center gap-2.5 px-7 py-3.5 font-sans text-caption tracking-editorial uppercase font-light transition-all duration-300 ${
-                label === "Instagram"
-                  ? "bg-gold text-void hover:bg-gold-dark"
-                  : "border border-parchment/20 text-parchment/70 hover:border-gold hover:text-gold"
-              }`}
+        {/* Giant heading */}
+        <div style={{ marginBottom: 64 }}>
+          <div style={{ overflow: "hidden" }}>
+            <h2
+              id="cta-heading"
+              className="reveal"
+              style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 300,
+                fontSize: "clamp(3.5rem, 10vw, 10rem)",
+                lineHeight: 0.92,
+                letterSpacing: "-0.03em",
+                color: "var(--parchment)",
+              }}
             >
-              <Icon
-                size={13}
-                className="transition-transform duration-300 group-hover:scale-110"
-                aria-hidden="true"
-              />
-              {label}
-            </a>
-          ))}
+              Join Us
+            </h2>
+          </div>
+          <div style={{ overflow: "hidden" }}>
+            <h2
+              className="reveal d1"
+              style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 300,
+                fontStyle: "italic",
+                fontSize: "clamp(3.5rem, 10vw, 10rem)",
+                lineHeight: 0.92,
+                letterSpacing: "-0.03em",
+                color: "var(--gold)",
+              }}
+            >
+              on the Journey
+            </h2>
+          </div>
         </div>
 
-        {/* Bottom scripture */}
-        <div className="reveal mt-20 flex flex-col items-center gap-3">
-          <span className="divider-gold opacity-30 mx-auto" aria-hidden="true" />
-          <p className="font-display italic text-parchment/25 font-light text-sm">
-            2 Corinthians 2:14
+        {/* Body + actions */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "40px 100px",
+          alignItems: "end",
+        }}
+          className="cta-grid"
+        >
+          <p className="reveal d2" style={{
+            fontFamily: "var(--font-sans)",
+            fontWeight: 300,
+            fontSize: "clamp(0.9rem, 1.5vw, 1.05rem)",
+            lineHeight: 1.8,
+            color: "rgba(248,245,239,0.45)",
+            maxWidth: 440,
+          }}>
+            Follow Euodia for a journey of worship and devotion — where music
+            and faith blend to create a beautiful fragrance of praise. We'd love
+            to have you with us.
           </p>
+
+          <div className="reveal d3" style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start" }}>
+            {socials.map((s, i) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target={s.href.startsWith("http") ? "_blank" : undefined}
+                rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 12,
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 11,
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: i === 0 ? "var(--void)" : "rgba(248,245,239,0.6)",
+                  background: i === 0 ? "var(--gold)" : "none",
+                  border: i === 0 ? "none" : "1px solid rgba(199,160,108,0.3)",
+                  padding: "11px 28px",
+                  textDecoration: "none",
+                  transition: "all 0.3s ease",
+                }}
+                onMouseEnter={(e) => {
+                  if (i !== 0) {
+                    (e.currentTarget as HTMLElement).style.borderColor = "var(--gold)";
+                    (e.currentTarget as HTMLElement).style.color = "var(--gold)";
+                  } else {
+                    (e.currentTarget as HTMLElement).style.background = "#b8904e";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (i !== 0) {
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(199,160,108,0.3)";
+                    (e.currentTarget as HTMLElement).style.color = "rgba(248,245,239,0.6)";
+                  } else {
+                    (e.currentTarget as HTMLElement).style.background = "var(--gold)";
+                  }
+                }}
+              >
+                {s.label}
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                  <path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </a>
+            ))}
+          </div>
         </div>
+
+        {/* Bottom rule */}
+        <div
+          className="line-grow"
+          style={{ height: 1, background: "var(--hairline)", marginTop: 100 }}
+          aria-hidden="true"
+        />
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .cta-grid {
+            grid-template-columns: 1fr !important;
+            gap: 48px !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

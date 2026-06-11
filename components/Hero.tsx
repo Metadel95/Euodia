@@ -1,184 +1,255 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown } from "lucide-react";
 
 export default function Hero() {
+  const [ready, setReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoaded(true), 100);
-    return () => clearTimeout(timer);
+    const t = setTimeout(() => setReady(true), 80);
+    return () => clearTimeout(t);
   }, []);
-
-  const scrollDown = () => {
-    const el = document.getElementById("meaning");
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  };
 
   return (
     <section
       id="hero"
-      className="relative w-full h-screen min-h-[600px] overflow-hidden bg-void flex flex-col"
-      aria-label="Hero section"
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100svh",
+        minHeight: 600,
+        overflow: "hidden",
+        background: "var(--void)",
+        display: "flex",
+        flexDirection: "column",
+      }}
+      aria-label="Hero"
     >
-      {/* Background video */}
+      {/* ── Video ── */}
       <video
         ref={videoRef}
         autoPlay
         loop
         muted
         playsInline
-        preload="auto"
         poster="/images/hero-poster.jpg"
-        className="absolute inset-0 w-full h-full object-cover"
         aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          opacity: ready ? 1 : 0,
+          transition: "opacity 1.8s ease",
+        }}
       >
-        {/* 
-          Replace these src paths with your actual video files.
-          Place your video in /public/videos/hero.mp4
-          and /public/videos/hero.webm for best cross-browser support.
-        */}
         <source src="/videos/hero.webm" type="video/webm" />
-        <source src="/videos/hero.mp4" type="video/mp4" />
+        <source src="/videos/hero.mp4"  type="video/mp4" />
       </video>
 
-      {/* Overlay */}
-      <div className="hero-overlay absolute inset-0" aria-hidden="true" />
+      {/* ── Overlay ── */}
+      <div className="video-overlay" style={{ position: "absolute", inset: 0 }} aria-hidden="true" />
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center flex-1 px-6 text-center">
+      {/* ── Top hairline ── */}
+      <div style={{
+        position: "absolute",
+        top: 60,
+        left: 40, right: 40,
+        height: 1,
+        background: "rgba(199,160,108,0.15)",
+      }} aria-hidden="true" />
 
-        {/* Logo wordmark */}
+      {/* ── Content ── */}
+      <div style={{
+        position: "relative",
+        zIndex: 10,
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-end",
+        padding: "0 40px 60px",
+        maxWidth: 1280,
+        margin: "0 auto",
+        width: "100%",
+        alignSelf: "center",
+      }}>
+
+        {/* Eyebrow */}
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 16,
+          marginBottom: 28,
+          opacity: ready ? 1 : 0,
+          transform: ready ? "none" : "translateY(12px)",
+          transition: "opacity 0.9s ease 0.2s, transform 0.9s ease 0.2s",
+        }}>
+          <span style={{ display: "block", width: 28, height: 1, background: "var(--gold)" }} aria-hidden="true" />
+          <span style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 10,
+            letterSpacing: "0.22em",
+            textTransform: "uppercase",
+            color: "rgba(199,160,108,0.8)",
+          }}>
+            Worship Collective · Est. 2024
+          </span>
+        </div>
+
+        {/* ── MASSIVE headline — the juanmora signature ── */}
         <div
-          className={`mb-12 md:mb-16 transition-all duration-1000 ${
-            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-          style={{ transitionDelay: "0.1s" }}
+          aria-label="Spreading the Fragrance of Christ Through Music and Worship"
+          style={{ overflow: "hidden" }}
         >
-          {/* Chi-Rho + Lily SVG mark */}
-          <div className="flex flex-col items-center gap-3">
-            <svg
-              width="52"
-              height="52"
-              viewBox="0 0 52 52"
-              fill="none"
-              aria-hidden="true"
-              className="mb-2"
+          {/* Line 1 */}
+          <div style={{ overflow: "hidden", marginBottom: "-0.04em" }}>
+            <h1
+              style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 300,
+                fontStyle: "italic",
+                fontSize: "clamp(4rem, 11vw, 10.5rem)",
+                lineHeight: 0.92,
+                letterSpacing: "-0.025em",
+                color: "var(--parchment)",
+                opacity: ready ? 1 : 0,
+                transform: ready ? "translateY(0)" : "translateY(100%)",
+                transition: "opacity 1s cubic-bezier(0.16,1,0.3,1) 0.35s, transform 1s cubic-bezier(0.16,1,0.3,1) 0.35s",
+                display: "block",
+              }}
             >
-              {/* Outer lily petals (simplified) */}
-              <circle cx="26" cy="26" r="24" stroke="#C7A06C" strokeWidth="0.75" opacity="0.5" />
-              <circle cx="26" cy="26" r="18" stroke="#C7A06C" strokeWidth="0.5" opacity="0.3" />
-              {/* Chi-Rho (XP) */}
-              <text
-                x="50%"
-                y="54%"
-                dominantBaseline="middle"
-                textAnchor="middle"
-                fontSize="24"
-                fontFamily="Georgia, serif"
-                fill="#C7A06C"
-                opacity="0.95"
-              >
-                ☧
-              </text>
-            </svg>
+              Spreading the
+            </h1>
+          </div>
+
+          {/* Line 2 — gold */}
+          <div style={{ overflow: "hidden", marginBottom: "-0.04em" }}>
             <span
-              className="font-display text-parchment/95 tracking-[0.35em] text-sm font-light uppercase"
+              style={{
+                display: "block",
+                fontFamily: "var(--font-display)",
+                fontWeight: 300,
+                fontSize: "clamp(4rem, 11vw, 10.5rem)",
+                lineHeight: 0.92,
+                letterSpacing: "-0.025em",
+                color: "var(--gold)",
+                opacity: ready ? 1 : 0,
+                transform: ready ? "translateY(0)" : "translateY(100%)",
+                transition: "opacity 1s cubic-bezier(0.16,1,0.3,1) 0.5s, transform 1s cubic-bezier(0.16,1,0.3,1) 0.5s",
+              }}
             >
-              Euodia
+              Fragrance
+            </span>
+          </div>
+
+          {/* Line 3 */}
+          <div style={{ overflow: "hidden" }}>
+            <span
+              style={{
+                display: "block",
+                fontFamily: "var(--font-display)",
+                fontWeight: 300,
+                fontStyle: "italic",
+                fontSize: "clamp(3rem, 8.5vw, 8rem)",
+                lineHeight: 0.95,
+                letterSpacing: "-0.02em",
+                color: "rgba(248,245,239,0.45)",
+                opacity: ready ? 1 : 0,
+                transform: ready ? "translateY(0)" : "translateY(100%)",
+                transition: "opacity 1s cubic-bezier(0.16,1,0.3,1) 0.65s, transform 1s cubic-bezier(0.16,1,0.3,1) 0.65s",
+              }}
+            >
+              of Christ
             </span>
           </div>
         </div>
 
-        {/* Headline */}
-        <h1
-          className={`font-display text-parchment font-light leading-none tracking-tight max-w-3xl mx-auto mb-6 transition-all duration-1000 ${
-            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-          }`}
-          style={{
-            fontSize: "clamp(2.4rem, 6vw, 5.5rem)",
-            lineHeight: "1.05",
-            transitionDelay: "0.3s",
-          }}
-        >
-          Spreading the Fragrance
-          <em className="block text-gold/90 font-light italic">
-            of Christ
-          </em>
-          Through Music and Worship
-        </h1>
+        {/* ── Bottom row: subtext + buttons ── */}
+        <div style={{
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "flex-end",
+          justifyContent: "space-between",
+          gap: 24,
+          marginTop: 48,
+          paddingTop: 28,
+          borderTop: "1px solid rgba(199,160,108,0.15)",
+          opacity: ready ? 1 : 0,
+          transform: ready ? "none" : "translateY(16px)",
+          transition: "opacity 0.9s ease 0.9s, transform 0.9s ease 0.9s",
+        }}>
+          <p style={{
+            fontFamily: "var(--font-sans)",
+            fontWeight: 300,
+            fontSize: "clamp(0.85rem, 1.4vw, 0.95rem)",
+            lineHeight: 1.7,
+            color: "rgba(248,245,239,0.45)",
+            maxWidth: 380,
+          }}>
+            A worship collective devoted to sharing the beauty of Christ through
+            music, community, and worship.
+          </p>
 
-        {/* Subheadline */}
-        <p
-          className={`font-sans text-parchment/60 font-light max-w-xl mx-auto mb-12 md:mb-16 transition-all duration-1000 ${
-            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-          }`}
-          style={{
-            fontSize: "clamp(0.9rem, 1.6vw, 1.05rem)",
-            lineHeight: "1.75",
-            transitionDelay: "0.55s",
-          }}
-        >
-          Euodia is a worship collective devoted to sharing the beauty of Christ
-          through music, community, and worship.
-        </p>
-
-        {/* Buttons */}
-        <div
-          className={`flex flex-col sm:flex-row items-center gap-4 transition-all duration-1000 ${
-            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-          }`}
-          style={{ transitionDelay: "0.75s" }}
-        >
-          <button
-            onClick={() => {
-              const el = document.getElementById("cta");
-              if (el) el.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="btn-gold px-8 py-3.5 bg-gold text-void font-sans text-caption tracking-editorial uppercase font-light hover:bg-gold-dark transition-colors duration-300"
-            aria-label="Join the journey"
-          >
-            Join the Journey
-          </button>
-          <button
-            onClick={() => {
-              const el = document.getElementById("meaning");
-              if (el) el.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="px-8 py-3.5 border border-parchment/40 text-parchment font-sans text-caption tracking-editorial uppercase font-light hover:border-gold hover:text-gold transition-all duration-300"
-            aria-label="Learn our story"
-          >
-            Learn Our Story
-          </button>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <button
+              className="btn btn-primary"
+              onClick={() => document.getElementById("cta")?.scrollIntoView({ behavior: "smooth" })}
+              aria-label="Join the journey"
+            >
+              Join the Journey
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+            <button
+              className="btn btn-outline"
+              onClick={() => document.getElementById("meaning")?.scrollIntoView({ behavior: "smooth" })}
+              aria-label="Learn our story"
+            >
+              Our Story
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div
-        className={`absolute bottom-8 left-1/2 -translate-x-1/2 transition-all duration-1000 ${
-          loaded ? "opacity-100" : "opacity-0"
-        }`}
-        style={{ transitionDelay: "1.2s" }}
-      >
-        <button
-          onClick={scrollDown}
-          className="flex flex-col items-center gap-2 text-parchment/40 hover:text-gold transition-colors duration-300"
-          aria-label="Scroll down"
-        >
-          <span className="font-sans text-caption tracking-editorial uppercase text-[10px]">
-            Scroll
-          </span>
-          <ChevronDown size={14} className="animate-bounce" />
-        </button>
-      </div>
+      {/* ── Bottom gradient into page ── */}
+      <div style={{
+        position: "absolute",
+        bottom: 0, left: 0, right: 0,
+        height: 120,
+        background: "linear-gradient(to bottom, transparent, var(--void))",
+      }} aria-hidden="true" />
 
-      {/* Bottom fade */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-parchment to-transparent"
-        aria-hidden="true"
-      />
+      {/* ── Scroll hint ── */}
+      <div style={{
+        position: "absolute",
+        bottom: 32,
+        right: 40,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 8,
+        opacity: ready ? 0.4 : 0,
+        transition: "opacity 0.8s ease 1.5s",
+      }} aria-hidden="true">
+        <span style={{
+          fontFamily: "var(--font-mono)",
+          fontSize: 9,
+          letterSpacing: "0.2em",
+          textTransform: "uppercase",
+          color: "var(--parchment)",
+          writingMode: "vertical-rl",
+        }}>
+          scroll
+        </span>
+        <div style={{
+          width: 1,
+          height: 48,
+          background: "linear-gradient(to bottom, var(--gold), transparent)",
+        }} />
+      </div>
     </section>
   );
 }
