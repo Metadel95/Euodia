@@ -12,9 +12,25 @@ export default function Hero() {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+
+    // On mobile, canplay may never fire — fall back after 3s so the
+    // gradient overlay is removed and the dark overlay shows instead.
+    const fallbackTimer = setTimeout(() => setVideoLoaded(true), 3000);
+
+    const handleCanPlay = () => {
+      clearTimeout(fallbackTimer);
+      setVideoLoaded(true);
+    };
+
+    video.addEventListener("canplay", handleCanPlay);
     video.play().catch(() => {
       // Autoplay blocked — that's fine, the poster/overlay still shows
     });
+
+    return () => {
+      video.removeEventListener("canplay", handleCanPlay);
+      clearTimeout(fallbackTimer);
+    };
   }, []);
 
   const scrollToMeaning = () => {
@@ -42,12 +58,11 @@ export default function Hero() {
           loop
           muted
           playsInline
-          preload="metadata"
-          poster="/hero-poster.jpg"
-          onCanPlay={() => setVideoLoaded(true)}
+          preload="auto"
+          onError={() => setVideoLoaded(true)}
           aria-hidden="true"
         >
-          <source src="https://res.cloudinary.com/dgxqifwdf/video/upload/v1781176987/AQM_xcYBJXwjeIvrLbdMiPKL1pVmzeYsbgPZTR8bfiUOW_YLWxnnEzHQSmy0xac_xkrrlg.mp4" type="video/mp4" />
+          <source src="https://res.cloudinary.com/dgxqifwdf/video/upload/q_auto,f_auto/v1781176987/AQM_xcYBJXwjeIvrLbdMiPKL1pVmzeYsbgPZTR8bfiUOW_YLWxnnEzHQSmy0xac_xkrrlg.mp4" type="video/mp4" />
         </video>
         {/* Fallback gradient when video isn't loaded */}
         <AnimatePresence>
