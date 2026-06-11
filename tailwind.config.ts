@@ -15,7 +15,7 @@ const config: Config = {
         dark: "#111111",
         muted: "#666666",
         "accent-light": "#ffffff",
-        "accent-dark": "#A87D4A",
+        "accent-dark": "#000000",
       },
       fontFamily: {
         serif: ['"Cormorant Garamond"', "Georgia", "serif"],
