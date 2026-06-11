@@ -11,11 +11,11 @@ const config: Config = {
       colors: {
         background: "#F8F5EF",
         foreground: "#1A1A1A",
-        accent: "#C7A06C",
+        accent: "#3d3d3d",
         dark: "#111111",
-        muted: "#666666",
-        "accent-light": "#DFC099",
-        "accent-dark": "#A87D4A",
+        muted: "#3d3d3d",
+        "accent-light": "#ffffff",
+        "accent-dark": "#ffffff",
       },
       fontFamily: {
         serif: ['"Cormorant Garamond"', "Georgia", "serif"],

@@ -47,7 +47,7 @@ export default function Hero() {
           onCanPlay={() => setVideoLoaded(true)}
           aria-hidden="true"
         >
-          <source src="/hero-video.mp4" type="video/mp4" />
+          <source src="https://res.cloudinary.com/dgxqifwdf/video/upload/v1781176987/AQM_xcYBJXwjeIvrLbdMiPKL1pVmzeYsbgPZTR8bfiUOW_YLWxnnEzHQSmy0xac_xkrrlg.mp4" type="video/mp4" />
         </video>
         {/* Fallback gradient when video isn't loaded */}
         <AnimatePresence>
@@ -90,7 +90,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="font-sans text-xs tracking-widest uppercase text-accent-light mb-6 block"
         >
-          A Worship Collective
+          Euodia songs and worship
         </motion.span>
 
         {/* Headline */}

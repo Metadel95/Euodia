@@ -45,11 +45,11 @@ export default function Meaning() {
             <div className="relative">
               <div
                 className="absolute inset-0 rounded-full blur-3xl opacity-20"
-                style={{ background: "#C7A06C", transform: "scale(1.4)" }}
+                style={{ background: "#3d3d3d", transform: "scale(1.4)" }}
                 aria-hidden="true"
               />
               <img
-                src={LOGO_URL}
+                src="https://res.cloudinary.com/dgxqifwdf/image/upload/v1781195838/Artboard_5_4x_cszeny.png"
                 alt="Euodia logo — Chi-Rho symbol surrounded by lily"
                 className="w-56 h-56 md:w-72 md:h-72 object-contain relative z-10"
               />
