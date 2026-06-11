@@ -13,12 +13,6 @@ import "@fontsource/cormorant-garamond/500-italic.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://euodia.worship";
 
-export const viewport = {
-  width: "device-width",
-  initialScale: 1,
-  viewportFit: "cover",
-};
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {

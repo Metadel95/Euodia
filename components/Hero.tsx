@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-
 const LOGO_URL = "https://res.cloudinary.com/dgxqifwdf/image/upload/v1781176122/Artboard_8_4x_ql3h3l.png";
 
 export default function Hero() {
@@ -13,6 +13,8 @@ export default function Hero() {
     const video = videoRef.current;
     if (!video) return;
 
+    // On mobile, canplay may never fire — fall back after 3s so the
+    // gradient overlay is removed and the dark overlay shows instead.
     const fallbackTimer = setTimeout(() => setVideoLoaded(true), 3000);
 
     const handleCanPlay = () => {
@@ -21,7 +23,9 @@ export default function Hero() {
     };
 
     video.addEventListener("canplay", handleCanPlay);
-    video.play().catch(() => {});
+    video.play().catch(() => {
+      // Autoplay blocked — that's fine, the poster/overlay still shows
+    });
 
     return () => {
       video.removeEventListener("canplay", handleCanPlay);
@@ -58,19 +62,21 @@ export default function Hero() {
           onError={() => setVideoLoaded(true)}
           aria-hidden="true"
         >
-          <source
-            src="https://res.cloudinary.com/dgxqifwdf/video/upload/q_auto,f_auto/v1781176987/AQM_xcYBJXwjeIvrLbdMiPKL1pVmzeYsbgPZTR8bfiUOW_YLWxnnEzHQSmy0xac_xkrrlg.mp4"
-            type="video/mp4"
-          />
+          <source src="https://res.cloudinary.com/dgxqifwdf/video/upload/q_auto,f_auto/v1781176987/AQM_xcYBJXwjeIvrLbdMiPKL1pVmzeYsbgPZTR8bfiUOW_YLWxnnEzHQSmy0xac_xkrrlg.mp4" type="video/mp4" />
         </video>
-        {/* Fallback gradient shown until video is ready */}
-        <div
-          className={`absolute inset-0 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-900 transition-opacity duration-1000 ${
-            videoLoaded ? "opacity-0 pointer-events-none" : "opacity-100"
-          }`}
-        />
+        {/* Fallback gradient when video isn't loaded */}
+        <AnimatePresence>
+          {!videoLoaded && (
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-900"
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1 }}
+            />
+          )}
+        </AnimatePresence>
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/55" />
+        {/* Subtle vignette */}
         <div
           className="absolute inset-0"
           style={{
@@ -80,46 +86,58 @@ export default function Hero() {
         />
       </div>
 
-      {/* Content — uses CSS animations so it works without JS hydration */}
-      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto w-full hero-content">
-        <div className="mb-12 hero-item" style={{ animationDelay: "0.2s" }}>
-          <img
-            src={LOGO_URL}
-            alt="Euodia logo"
-            className="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-lg"
-          />
-        </div>
+      {/* Content */}
+      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto w-full">
+        {/* Logo */}
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+          className="mb-12"
+        >
+          <img src={LOGO_URL} alt="Euodia logo" className="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-lg" />
+        </motion.div>
 
-        <span
-          className="font-sans text-xs tracking-widest uppercase text-accent-light mb-6 block hero-item"
-          style={{ animationDelay: "0.4s" }}
+        {/* Eyebrow */}
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="font-sans text-xs tracking-widest uppercase text-accent-light mb-6 block"
         >
           Euodia songs and worship
-        </span>
+        </motion.span>
 
-        <h1
-          className="font-serif font-light text-white leading-tight mb-6 hero-item"
-          style={{
-            fontSize: "clamp(2.2rem, 5vw, 4.5rem)",
-            animationDelay: "0.55s",
-          }}
+        {/* Headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.6 }}
+          className="font-serif font-light text-white leading-tight mb-6"
+          style={{ fontSize: "clamp(2.2rem, 5vw, 4.5rem)" }}
         >
           Spreading the Fragrance of{" "}
           <em className="not-italic text-accent-light">Christ</em> Through Music
           and Worship
-        </h1>
+        </motion.h1>
 
-        <p
-          className="font-sans font-light text-white/70 text-base md:text-lg leading-relaxed max-w-2xl mb-12 hero-item"
-          style={{ animationDelay: "0.75s" }}
+        {/* Subheadline */}
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.85 }}
+          className="font-sans font-light text-white/70 text-base md:text-lg leading-relaxed max-w-2xl mb-12"
         >
           Euodia is a worship collective devoted to sharing the beauty of Christ
           through music, community, and worship.
-        </p>
+        </motion.p>
 
-        <div
-          className="flex flex-col sm:flex-row gap-4 items-center hero-item"
-          style={{ animationDelay: "0.9s" }}
+        {/* Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 1.1 }}
+          className="flex flex-col sm:flex-row gap-4 items-center"
         >
           <button
             onClick={scrollToJourney}
@@ -135,20 +153,25 @@ export default function Hero() {
           >
             Learn Our Story
           </button>
-        </div>
+        </motion.div>
       </div>
 
       {/* Scroll indicator */}
-      <button
+      <motion.button
         onClick={scrollToMeaning}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-white/50 hover:text-white/80 transition-colors duration-300 hero-item"
-        style={{ animationDelay: "1.5s" }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-white/50 hover:text-white/80 transition-colors duration-300"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.8, duration: 0.8 }}
         aria-label="Scroll down"
       >
-        <div className="animate-bounce">
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+        >
           <ChevronDown size={24} strokeWidth={1.5} />
-        </div>
-      </button>
+        </motion.div>
+      </motion.button>
     </section>
   );
 }

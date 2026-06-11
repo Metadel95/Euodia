@@ -1,108 +1,106 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { Instagram, Youtube, Mail } from "lucide-react";
+import { SOCIAL_LINKS } from "@/lib/utils";
+import SectionTitle from "./SectionTitle";
 
-const SYMBOL_URL = "https://res.cloudinary.com/dgxqifwdf/image/upload/v1781195838/Artboard_5_4x_cszeny.png";
+const socialLinks = [
+  {
+    label: "Instagram",
+    href: SOCIAL_LINKS.instagram,
+    icon: Instagram,
+    description: "Follow our worship journey on Instagram",
+  },
+  {
+    label: "YouTube",
+    href: SOCIAL_LINKS.youtube,
+    icon: Youtube,
+    description: "Watch worship sessions on YouTube",
+  },
+  {
+    label: "Email",
+    href: SOCIAL_LINKS.email,
+    icon: Mail,
+    description: "Send us an email",
+  },
+];
 
-function useInView(threshold = 0.15) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setInView(true); obs.disconnect(); } },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return { ref, inView };
-}
-
-export default function Meaning() {
-  const { ref, inView } = useInView();
-
+export default function CTA() {
   return (
     <section
-      id="meaning"
-      className="bg-background py-24 md:py-36 px-6"
-      aria-labelledby="meaning-heading"
+      id="journey"
+      className="bg-dark py-24 md:py-36 px-6"
+      aria-labelledby="cta-heading"
     >
-      <div className="max-w-6xl mx-auto" ref={ref}>
-        <div className={`ornament-line mb-20 transition-opacity duration-700 ${inView ? "opacity-100" : "opacity-0"}`}>
-          <span className="font-sans text-xs tracking-widest text-accent uppercase px-4">
-            Our Symbol
+      {/* Top ornamental line */}
+      <motion.div
+        className="max-w-2xl mx-auto mb-20"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1 }}
+      >
+        <div className="flex items-center gap-4">
+          <div className="flex-1 h-px opacity-20" style={{ background: "linear-gradient(to right, transparent, #C7A06C)" }} />
+          <span className="font-sans text-xs tracking-widest text-accent uppercase px-2">
+            Come and See
           </span>
+          <div className="flex-1 h-px opacity-20" style={{ background: "linear-gradient(to left, transparent, #C7A06C)" }} />
         </div>
+      </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-center">
-          {/* Left: Logo */}
-          <div className={`flex justify-center transition-all duration-700 delay-100 ${inView ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}>
-            <div className="relative">
-              <div
-                className="absolute inset-0 rounded-full blur-3xl opacity-20"
-                style={{ background: "#3d3d3d", transform: "scale(1.4)" }}
-                aria-hidden="true"
+      <div className="max-w-3xl mx-auto text-center">
+        <SectionTitle
+          eyebrow="Worship with Us"
+          heading="Join Us on the Journey"
+          subheading="Follow Euodia for a journey of worship and devotion, where music and faith blend to create a beautiful fragrance of praise."
+          light
+        />
+
+        {/* Social links */}
+        <motion.div
+          className="flex flex-col sm:flex-row gap-4 justify-center mt-14"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+        >
+          {socialLinks.map(({ label, href, icon: Icon, description }) => (
+            <motion.a
+              key={label}
+              href={href}
+              target={href.startsWith("http") ? "_blank" : undefined}
+              rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+              aria-label={description}
+              className="group flex items-center justify-center gap-3 px-7 py-3.5 border border-white/20 text-white/80 font-sans text-sm tracking-wider uppercase hover:border-accent hover:text-accent transition-all duration-300 min-w-[160px]"
+              whileHover={{ y: -2 }}
+              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            >
+              <Icon
+                size={16}
+                strokeWidth={1.5}
+                className="transition-colors duration-300"
               />
-              <img
-                src={SYMBOL_URL}
-                alt="Euodia logo — Chi-Rho symbol surrounded by lily"
-                className="w-56 h-56 md:w-72 md:h-72 object-contain relative z-10"
-              />
-            </div>
-          </div>
+              {label}
+            </motion.a>
+          ))}
+        </motion.div>
 
-          {/* Right: Text */}
-          <div className="flex flex-col gap-8">
-            <div className={`transition-all duration-700 delay-200 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-              <span className="font-sans text-xs tracking-widest text-accent uppercase block mb-4">
-                The Meaning of Euodia
-              </span>
-              <h2
-                id="meaning-heading"
-                className="font-serif font-light text-4xl md:text-5xl text-foreground leading-tight"
-              >
-                The Lily and{" "}
-                <em className="not-italic text-accent">XP Symbol</em>
-              </h2>
-            </div>
-
-            <div className={`w-12 h-px bg-accent transition-all duration-500 delay-300 ${inView ? "scale-x-100" : "scale-x-0"}`} style={{ transformOrigin: "left" }} />
-
-            <div className={`flex flex-col gap-6 text-muted font-sans font-light text-base leading-relaxed transition-all duration-700 delay-300 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-              <p>
-                In the center is the{" "}
-                <strong className="font-medium text-foreground">Chi-Rho (XP)</strong>
-                , one of the earliest Christian symbols representing Christ.
-              </p>
-              <p>
-                Surrounding it is the{" "}
-                <strong className="font-medium text-foreground">lily</strong>,
-                symbolizing beauty and fragrance — an ancient emblem of purity
-                and the divine presence.
-              </p>
-              <p>
-                The name{" "}
-                <strong className="font-medium text-foreground">Euodia</strong>{" "}
-                means{" "}
-                <em className="italic text-accent">fragrance</em> or{" "}
-                <em className="italic text-accent">prosperous journey</em>.
-              </p>
-              <p>
-                Together these elements express our desire to spread the
-                fragrance of Christ through worship and music — a living,
-                fragrant offering to the Lord.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className={`ornament-line mt-20 transition-opacity duration-700 delay-200 ${inView ? "opacity-100" : "opacity-0"}`}>
-          <span className="font-serif italic text-xs text-muted px-4">
-            εὐωδία — A fragrant aroma
-          </span>
-        </div>
+        {/* Scripture */}
+        <motion.blockquote
+          className="mt-16 text-white/30 font-serif italic text-base md:text-lg font-light"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.5 }}
+        >
+          "For we are to God the pleasing aroma of Christ among those who are
+          being saved."
+          <footer className="not-italic font-sans text-xs tracking-wider text-white/20 mt-2 block uppercase">
+            2 Corinthians 2:15
+          </footer>
+        </motion.blockquote>
       </div>
     </section>
   );

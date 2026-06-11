@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface SectionTitleProps {
@@ -7,7 +10,6 @@ interface SectionTitleProps {
   align?: "left" | "center" | "right";
   light?: boolean;
   className?: string;
-  inView?: boolean;
 }
 
 export default function SectionTitle({
@@ -17,7 +19,6 @@ export default function SectionTitle({
   align = "center",
   light = false,
   className,
-  inView = true,
 }: SectionTitleProps) {
   const alignClass = {
     left: "text-left items-start",
@@ -26,13 +27,12 @@ export default function SectionTitle({
   }[align];
 
   return (
-    <div
-      className={cn(
-        "flex flex-col gap-4 transition-all duration-700",
-        alignClass,
-        inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
-        className
-      )}
+    <motion.div
+      className={cn("flex flex-col gap-4", alignClass, className)}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
     >
       {eyebrow && (
         <span
@@ -63,6 +63,6 @@ export default function SectionTitle({
           {subheading}
         </p>
       )}
-    </div>
+    </motion.div>
   );
 }
