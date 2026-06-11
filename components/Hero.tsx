@@ -1,146 +1,154 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
-
-const LOGO_URL = "https://res.cloudinary.com/dgxqifwdf/image/upload/v1781176122/Artboard_8_4x_ql3h3l.png";
-const VIDEO_URL = "https://res.cloudinary.com/dgxqifwdf/video/upload/v1781176987/AQM_xcYBJXwjeIvrLbdMiPKL1pVmzeYsbgPZTR8bfiUOW_YLWxnnEzHQSmy0xac_xkrrlg.mp4";
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.play().catch(() => {});
+    const timer = setTimeout(() => setLoaded(true), 100);
+    return () => clearTimeout(timer);
   }, []);
 
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  const scrollDown = () => {
+    const el = document.getElementById("meaning");
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <section
       id="hero"
-      style={{
-        position: "relative",
-        minHeight: "100svh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        overflow: "hidden",
-      }}
+      className="relative w-full h-screen min-h-[600px] overflow-hidden bg-void flex flex-col"
+      aria-label="Hero section"
     >
-      {/* Always-visible dark base */}
-      <div style={{
-        position: "absolute", inset: 0, zIndex: 0,
-        background: "linear-gradient(160deg, #0e0c0a 0%, #1a1410 50%, #0a0908 100%)"
-      }} />
-
-      {/* Video */}
+      {/* Background video */}
       <video
         ref={videoRef}
-        autoPlay loop muted playsInline preload="auto"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        poster="/images/hero-poster.jpg"
+        className="absolute inset-0 w-full h-full object-cover"
         aria-hidden="true"
-        style={{
-          position: "absolute", inset: 0, zIndex: 1,
-          width: "100%", height: "100%", objectFit: "cover",
-        }}
       >
-        <source src={VIDEO_URL} type="video/mp4" />
+        {/* 
+          Replace these src paths with your actual video files.
+          Place your video in /public/videos/hero.mp4
+          and /public/videos/hero.webm for best cross-browser support.
+        */}
+        <source src="/videos/hero.webm" type="video/webm" />
+        <source src="/videos/hero.mp4" type="video/mp4" />
       </video>
 
-      {/* Overlays */}
-      <div style={{ position: "absolute", inset: 0, zIndex: 2, background: "rgba(0,0,0,0.58)" }} />
-      <div style={{
-        position: "absolute", inset: 0, zIndex: 2,
-        background: "radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.55) 100%)"
-      }} />
+      {/* Overlay */}
+      <div className="hero-overlay absolute inset-0" aria-hidden="true" />
 
       {/* Content */}
-      <div style={{
-        position: "relative", zIndex: 10,
-        display: "flex", flexDirection: "column", alignItems: "center",
-        textAlign: "center",
-        padding: "2rem 1.5rem",
-        width: "100%", maxWidth: "56rem",
-        margin: "0 auto",
-      }}>
-        <img
-          src={LOGO_URL}
-          alt="Euodia logo"
-          style={{ width: "5rem", height: "5rem", objectFit: "contain", marginBottom: "2.5rem", filter: "drop-shadow(0 4px 24px rgba(199,160,108,0.3))" }}
-        />
+      <div className="relative z-10 flex flex-col items-center justify-center flex-1 px-6 text-center">
 
-        <span style={{
-          fontFamily: "Inter Variable, Inter, sans-serif",
-          fontSize: "0.7rem", letterSpacing: "0.3em",
-          textTransform: "uppercase", color: "#DFC099",
-          marginBottom: "1.25rem", display: "block",
-        }}>
-          A Worship Collective
-        </span>
+        {/* Logo wordmark */}
+        <div
+          className={`mb-12 md:mb-16 transition-all duration-1000 ${
+            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
+          style={{ transitionDelay: "0.1s" }}
+        >
+          {/* Chi-Rho + Lily SVG mark */}
+          <div className="flex flex-col items-center gap-3">
+            <svg
+              width="52"
+              height="52"
+              viewBox="0 0 52 52"
+              fill="none"
+              aria-hidden="true"
+              className="mb-2"
+            >
+              {/* Outer lily petals (simplified) */}
+              <circle cx="26" cy="26" r="24" stroke="#C7A06C" strokeWidth="0.75" opacity="0.5" />
+              <circle cx="26" cy="26" r="18" stroke="#C7A06C" strokeWidth="0.5" opacity="0.3" />
+              {/* Chi-Rho (XP) */}
+              <text
+                x="50%"
+                y="54%"
+                dominantBaseline="middle"
+                textAnchor="middle"
+                fontSize="24"
+                fontFamily="Georgia, serif"
+                fill="#C7A06C"
+                opacity="0.95"
+              >
+                ☧
+              </text>
+            </svg>
+            <span
+              className="font-display text-parchment/95 tracking-[0.35em] text-sm font-light uppercase"
+            >
+              Euodia
+            </span>
+          </div>
+        </div>
 
-        <h1 style={{
-          fontFamily: "Cormorant Garamond, Georgia, serif",
-          fontWeight: 300,
-          fontSize: "clamp(2rem, 6vw, 4.5rem)",
-          lineHeight: 1.15,
-          color: "#ffffff",
-          marginBottom: "1.5rem",
-          letterSpacing: "-0.01em",
-        }}>
-          Spreading the Fragrance of{" "}
-          <em style={{ fontStyle: "normal", color: "#DFC099" }}>Christ</em>
-          {" "}Through Music and Worship
+        {/* Headline */}
+        <h1
+          className={`font-display text-parchment font-light leading-none tracking-tight max-w-3xl mx-auto mb-6 transition-all duration-1000 ${
+            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          }`}
+          style={{
+            fontSize: "clamp(2.4rem, 6vw, 5.5rem)",
+            lineHeight: "1.05",
+            transitionDelay: "0.3s",
+          }}
+        >
+          Spreading the Fragrance
+          <em className="block text-gold/90 font-light italic">
+            of Christ
+          </em>
+          Through Music and Worship
         </h1>
 
-        <p style={{
-          fontFamily: "Inter Variable, Inter, sans-serif",
-          fontWeight: 300,
-          fontSize: "clamp(0.95rem, 2.5vw, 1.125rem)",
-          lineHeight: 1.75,
-          color: "rgba(255,255,255,0.7)",
-          maxWidth: "38rem",
-          marginBottom: "2.5rem",
-        }}>
+        {/* Subheadline */}
+        <p
+          className={`font-sans text-parchment/60 font-light max-w-xl mx-auto mb-12 md:mb-16 transition-all duration-1000 ${
+            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          }`}
+          style={{
+            fontSize: "clamp(0.9rem, 1.6vw, 1.05rem)",
+            lineHeight: "1.75",
+            transitionDelay: "0.55s",
+          }}
+        >
           Euodia is a worship collective devoted to sharing the beauty of Christ
           through music, community, and worship.
         </p>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", width: "100%", maxWidth: "22rem" }}>
+        {/* Buttons */}
+        <div
+          className={`flex flex-col sm:flex-row items-center gap-4 transition-all duration-1000 ${
+            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          }`}
+          style={{ transitionDelay: "0.75s" }}
+        >
           <button
-            onClick={() => scrollTo("journey")}
-            style={{
-              padding: "1rem 2rem",
-              background: "#C7A06C",
-              color: "#fff",
-              border: "none",
-              fontFamily: "Inter Variable, Inter, sans-serif",
-              fontSize: "0.75rem",
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              cursor: "pointer",
-              width: "100%",
+            onClick={() => {
+              const el = document.getElementById("cta");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
             }}
+            className="btn-gold px-8 py-3.5 bg-gold text-void font-sans text-caption tracking-editorial uppercase font-light hover:bg-gold-dark transition-colors duration-300"
+            aria-label="Join the journey"
           >
             Join the Journey
           </button>
           <button
-            onClick={() => scrollTo("meaning")}
-            style={{
-              padding: "1rem 2rem",
-              background: "transparent",
-              color: "#fff",
-              border: "1px solid rgba(255,255,255,0.35)",
-              fontFamily: "Inter Variable, Inter, sans-serif",
-              fontSize: "0.75rem",
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              cursor: "pointer",
-              width: "100%",
+            onClick={() => {
+              const el = document.getElementById("meaning");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
             }}
+            className="px-8 py-3.5 border border-parchment/40 text-parchment font-sans text-caption tracking-editorial uppercase font-light hover:border-gold hover:text-gold transition-all duration-300"
+            aria-label="Learn our story"
           >
             Learn Our Story
           </button>
@@ -148,26 +156,29 @@ export default function Hero() {
       </div>
 
       {/* Scroll indicator */}
-      <button
-        onClick={() => scrollTo("meaning")}
-        aria-label="Scroll down"
-        style={{
-          position: "absolute", bottom: "2rem",
-          left: "50%", transform: "translateX(-50%)",
-          zIndex: 10, background: "none", border: "none",
-          color: "rgba(255,255,255,0.45)", cursor: "pointer",
-          animation: "bounce 2s ease-in-out infinite",
-        }}
+      <div
+        className={`absolute bottom-8 left-1/2 -translate-x-1/2 transition-all duration-1000 ${
+          loaded ? "opacity-100" : "opacity-0"
+        }`}
+        style={{ transitionDelay: "1.2s" }}
       >
-        <ChevronDown size={24} strokeWidth={1.5} />
-      </button>
+        <button
+          onClick={scrollDown}
+          className="flex flex-col items-center gap-2 text-parchment/40 hover:text-gold transition-colors duration-300"
+          aria-label="Scroll down"
+        >
+          <span className="font-sans text-caption tracking-editorial uppercase text-[10px]">
+            Scroll
+          </span>
+          <ChevronDown size={14} className="animate-bounce" />
+        </button>
+      </div>
 
-      <style>{`
-        @keyframes bounce {
-          0%, 100% { transform: translateX(-50%) translateY(0); }
-          50% { transform: translateX(-50%) translateY(7px); }
-        }
-      `}</style>
+      {/* Bottom fade */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-parchment to-transparent"
+        aria-hidden="true"
+      />
     </section>
   );
 }

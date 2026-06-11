@@ -1,60 +1,56 @@
-"use client";
-
-import { cn } from "@/lib/utils";
-
 interface SectionTitleProps {
   eyebrow?: string;
   heading: string;
   subheading?: string;
-  align?: "left" | "center" | "right";
+  align?: "left" | "center";
   light?: boolean;
-  className?: string;
 }
 
 export default function SectionTitle({
   eyebrow,
   heading,
   subheading,
-  align = "center",
+  align = "left",
   light = false,
-  className,
 }: SectionTitleProps) {
-  const textAlign = align === "left" ? "left" : align === "right" ? "right" : "center";
+  const center = align === "center";
 
   return (
-    <div
-      className={cn(className)}
-      style={{ textAlign, display: "flex", flexDirection: "column", gap: "1rem", alignItems: align === "center" ? "center" : align === "right" ? "flex-end" : "flex-start" }}
-    >
+    <div className={`flex flex-col gap-4 ${center ? "items-center text-center" : "items-start"}`}>
       {eyebrow && (
-        <span style={{
-          fontFamily: "Inter Variable, Inter, sans-serif",
-          fontSize: "0.7rem",
-          letterSpacing: "0.3em",
-          textTransform: "uppercase",
-          color: light ? "#DFC099" : "#C7A06C",
-        }}>
-          {eyebrow}
-        </span>
+        <div className={`flex items-center gap-3 ${center ? "justify-center" : ""}`}>
+          <span
+            className={`divider-gold ${center ? "" : ""}`}
+            aria-hidden="true"
+          />
+          <span
+            className={`font-sans text-caption tracking-editorial uppercase ${
+              light ? "text-gold/70" : "text-gold"
+            }`}
+          >
+            {eyebrow}
+          </span>
+        </div>
       )}
-      <h2 style={{
-        fontFamily: "Cormorant Garamond, Georgia, serif",
-        fontWeight: 300,
-        fontSize: "clamp(2.2rem, 6vw, 4rem)",
-        lineHeight: 1.15,
-        color: light ? "#ffffff" : "#1A1A1A",
-      }}>
+      <h2
+        className={`font-display font-light leading-none ${
+          light ? "text-parchment" : "text-ink"
+        }`}
+        style={{
+          fontSize: "clamp(2.2rem, 4.5vw, 3.8rem)",
+          letterSpacing: "-0.02em",
+          lineHeight: "1.05",
+        }}
+      >
         {heading}
       </h2>
       {subheading && (
-        <p style={{
-          fontFamily: "Inter Variable, Inter, sans-serif",
-          fontWeight: 300,
-          fontSize: "clamp(0.9rem, 2.5vw, 1.05rem)",
-          lineHeight: 1.8,
-          color: light ? "rgba(255,255,255,0.65)" : "#666666",
-          maxWidth: "38rem",
-        }}>
+        <p
+          className={`font-sans font-light max-w-lg ${
+            light ? "text-parchment/55" : "text-muted"
+          }`}
+          style={{ fontSize: "clamp(0.9rem, 1.5vw, 1rem)", lineHeight: "1.75" }}
+        >
           {subheading}
         </p>
       )}

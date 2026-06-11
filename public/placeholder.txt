@@ -1,0 +1,8 @@
+public/
+├── videos/
+│   ├── hero.mp4       ← Place your worship video here (H.264, 1080p recommended)
+│   └── hero.webm      ← WebM version for better compression (optional but recommended)
+├── images/
+│   ├── hero-poster.jpg ← Static poster frame shown before video loads
+│   └── og-image.jpg    ← Open Graph image (1200×630px)
+└── favicon.ico         ← Replace with your actual favicon

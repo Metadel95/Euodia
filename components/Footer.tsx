@@ -1,69 +1,51 @@
-"use client";
-
 import { Instagram, Youtube, Mail } from "lucide-react";
-import { SOCIAL_LINKS } from "@/lib/utils";
-
-const LOGO_URL = "https://res.cloudinary.com/dgxqifwdf/image/upload/v1781176122/Artboard_8_4x_ql3h3l.png";
-
-const socialLinks = [
-  { label: "Instagram", href: SOCIAL_LINKS.instagram, icon: Instagram },
-  { label: "YouTube",   href: SOCIAL_LINKS.youtube,   icon: Youtube   },
-  { label: "Email",     href: SOCIAL_LINKS.email,      icon: Mail      },
-];
 
 export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer style={{
-      background: "#F8F5EF",
-      borderTop: "1px solid rgba(26,26,26,0.08)",
-      padding: "3rem 1.5rem",
-    }}>
-      <div style={{
-        maxWidth: "72rem", margin: "0 auto",
-        display: "flex", flexDirection: "column",
-        alignItems: "center", gap: "1.5rem",
-      }}>
-        <img
-          src={LOGO_URL}
-          alt="Euodia"
-          style={{ width: "2.5rem", height: "2.5rem", objectFit: "contain" }}
-        />
+    <footer className="bg-void border-t border-parchment/5 py-10" role="contentinfo">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
 
-        <nav aria-label="Social links" style={{ display: "flex", gap: "1.5rem" }}>
-          {socialLinks.map(({ label, href, icon: Icon }) => (
-            <a
-              key={label}
-              href={href}
-              target={href.startsWith("http") ? "_blank" : undefined}
-              rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-              aria-label={label}
-              style={{ color: "#888", transition: "color 0.2s ease" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#C7A06C")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#888")}
+          {/* Logo */}
+          <div className="flex items-center gap-3">
+            <span
+              className="font-display text-gold"
+              style={{ fontSize: "1.25rem" }}
+              aria-hidden="true"
             >
-              <Icon size={17} strokeWidth={1.5} />
-            </a>
-          ))}
-        </nav>
+              ☧
+            </span>
+            <span className="font-display text-parchment/60 tracking-[0.15em] text-sm font-light uppercase">
+              Euodia
+            </span>
+          </div>
 
-        <div style={{
-          display: "flex", flexDirection: "column", alignItems: "center",
-          gap: "0.25rem", textAlign: "center",
-        }}>
-          <p style={{
-            fontFamily: "Inter Variable, Inter, sans-serif",
-            fontSize: "0.75rem", color: "#888",
-          }}>
-            &copy; {year} Euodia. All rights reserved.
+          {/* Center */}
+          <p className="font-sans text-parchment/25 text-[11px] tracking-editorial uppercase text-center">
+            Made with devotion &nbsp;·&nbsp; © {year} Euodia
           </p>
-          <p style={{
-            fontFamily: "Cormorant Garamond, Georgia, serif",
-            fontStyle: "italic", fontSize: "0.8rem", color: "#aaa",
-          }}>
-            Made with devotion.
-          </p>
+
+          {/* Social icons */}
+          <div className="flex items-center gap-5">
+            {[
+              { href: "https://instagram.com/euodiaworship", Icon: Instagram, label: "Instagram" },
+              { href: "https://youtube.com/@euodiaworship", Icon: Youtube, label: "YouTube" },
+              { href: "mailto:hello@euodia.co", Icon: Mail, label: "Email" },
+            ].map(({ href, Icon, label }) => (
+              <a
+                key={label}
+                href={href}
+                aria-label={label}
+                target={label !== "Email" ? "_blank" : undefined}
+                rel={label !== "Email" ? "noopener noreferrer" : undefined}
+                className="text-parchment/25 hover:text-gold transition-colors duration-300"
+              >
+                <Icon size={14} aria-hidden="true" />
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </footer>

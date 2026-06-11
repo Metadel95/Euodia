@@ -1,11 +1,9 @@
-import type { MetadataRoute } from "next";
+import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://euodia.worship";
-
   return [
     {
-      url: siteUrl,
+      url: "https://euodia.co",
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 1,
