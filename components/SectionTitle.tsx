@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface SectionTitleProps {
@@ -20,49 +19,45 @@ export default function SectionTitle({
   light = false,
   className,
 }: SectionTitleProps) {
-  const alignClass = {
-    left: "text-left items-start",
-    center: "text-center items-center",
-    right: "text-right items-end",
-  }[align];
+  const textAlign = align === "left" ? "left" : align === "right" ? "right" : "center";
 
   return (
-    <motion.div
-      className={cn("flex flex-col gap-4", alignClass, className)}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+    <div
+      className={cn(className)}
+      style={{ textAlign, display: "flex", flexDirection: "column", gap: "1rem", alignItems: align === "center" ? "center" : align === "right" ? "flex-end" : "flex-start" }}
     >
       {eyebrow && (
-        <span
-          className={cn(
-            "font-sans text-xs tracking-widest uppercase",
-            light ? "text-accent-light" : "text-accent"
-          )}
-        >
+        <span style={{
+          fontFamily: "Inter Variable, Inter, sans-serif",
+          fontSize: "0.7rem",
+          letterSpacing: "0.3em",
+          textTransform: "uppercase",
+          color: light ? "#DFC099" : "#C7A06C",
+        }}>
           {eyebrow}
         </span>
       )}
-      <h2
-        className={cn(
-          "font-serif font-light leading-tight",
-          "text-4xl md:text-5xl lg:text-6xl",
-          light ? "text-white" : "text-foreground"
-        )}
-      >
+      <h2 style={{
+        fontFamily: "Cormorant Garamond, Georgia, serif",
+        fontWeight: 300,
+        fontSize: "clamp(2.2rem, 6vw, 4rem)",
+        lineHeight: 1.15,
+        color: light ? "#ffffff" : "#1A1A1A",
+      }}>
         {heading}
       </h2>
       {subheading && (
-        <p
-          className={cn(
-            "font-sans font-light text-base md:text-lg max-w-2xl leading-relaxed",
-            light ? "text-white/70" : "text-muted"
-          )}
-        >
+        <p style={{
+          fontFamily: "Inter Variable, Inter, sans-serif",
+          fontWeight: 300,
+          fontSize: "clamp(0.9rem, 2.5vw, 1.05rem)",
+          lineHeight: 1.8,
+          color: light ? "rgba(255,255,255,0.65)" : "#666666",
+          maxWidth: "38rem",
+        }}>
           {subheading}
         </p>
       )}
-    </motion.div>
+    </div>
   );
 }

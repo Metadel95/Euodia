@@ -1,132 +1,189 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 const LOGO_URL = "https://res.cloudinary.com/dgxqifwdf/image/upload/v1781176122/Artboard_8_4x_ql3h3l.png";
 
 export default function Meaning() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const els = sectionRef.current?.querySelectorAll<HTMLElement>(".reveal");
+    if (!els) return;
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add("visible")),
+      { threshold: 0.08 }
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
       id="meaning"
-      className="bg-background py-24 md:py-36 px-6"
-      aria-labelledby="meaning-heading"
+      ref={sectionRef}
+      style={{ background: "#F8F5EF", padding: "6rem 1.5rem" }}
     >
-      <div className="max-w-6xl mx-auto">
+      <style>{`
+        .reveal {
+          opacity: 0;
+          transform: translateY(28px);
+          transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1);
+        }
+        .reveal.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.32s; }
+        .meaning-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 3.5rem;
+          align-items: center;
+          max-width: 72rem;
+          margin: 0 auto;
+        }
+        @media (min-width: 768px) {
+          .meaning-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+          }
+        }
+        .ornament {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 4rem;
+        }
+        .ornament::before, .ornament::after {
+          content: "";
+          flex: 1;
+          height: 1px;
+          background: linear-gradient(to right, transparent, rgba(199,160,108,0.5), transparent);
+        }
+        .scale-line {
+          width: 3rem;
+          height: 1px;
+          background: #C7A06C;
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.7s cubic-bezier(0.16,1,0.3,1) 0.15s;
+        }
+        .scale-line.visible {
+          transform: scaleX(1);
+        }
+      `}</style>
 
-        {/* Top ornamental line */}
-        <motion.div
-          className="ornament-line mb-20"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 1 }}
-        >
-          <span className="font-sans text-xs tracking-widest text-accent uppercase px-4">
+      <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
+
+        <div className="ornament reveal">
+          <span style={{
+            fontFamily: "Inter Variable, Inter, sans-serif",
+            fontSize: "0.7rem", letterSpacing: "0.3em",
+            textTransform: "uppercase", color: "#C7A06C",
+            padding: "0 1rem",
+          }}>
             Our Symbol
           </span>
-        </motion.div>
+        </div>
 
-        {/* Two-column layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-center">
-
-          {/* Left: Logo */}
-          <motion.div
-            className="flex justify-center"
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div className="relative">
-              <div
-                className="absolute inset-0 rounded-full blur-3xl opacity-20"
-                style={{ background: "#C7A06C", transform: "scale(1.4)" }}
-                aria-hidden="true"
-              />
+        <div className="meaning-grid">
+          {/* Logo */}
+          <div className="reveal" style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ position: "relative" }}>
+              <div style={{
+                position: "absolute", inset: 0,
+                background: "#C7A06C",
+                borderRadius: "50%",
+                filter: "blur(48px)",
+                opacity: 0.18,
+                transform: "scale(1.4)",
+              }} />
               <img
                 src={LOGO_URL}
-                alt="Euodia logo — Chi-Rho symbol surrounded by lily"
-                className="w-56 h-56 md:w-72 md:h-72 object-contain relative z-10"
+                alt="Euodia Chi-Rho lily logo"
+                style={{
+                  width: "clamp(14rem, 40vw, 18rem)",
+                  height: "clamp(14rem, 40vw, 18rem)",
+                  objectFit: "contain",
+                  position: "relative", zIndex: 1,
+                }}
               />
             </div>
-          </motion.div>
+          </div>
 
-          {/* Right: Text */}
-          <div className="flex flex-col gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <span className="font-sans text-xs tracking-widest text-accent uppercase block mb-4">
+          {/* Text */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem" }}>
+            <div className="reveal">
+              <span style={{
+                fontFamily: "Inter Variable, Inter, sans-serif",
+                fontSize: "0.7rem", letterSpacing: "0.3em",
+                textTransform: "uppercase", color: "#C7A06C",
+                display: "block", marginBottom: "1rem",
+              }}>
                 The Meaning of Euodia
               </span>
-              <h2
-                id="meaning-heading"
-                className="font-serif font-light text-4xl md:text-5xl text-foreground leading-tight"
-              >
+              <h2 style={{
+                fontFamily: "Cormorant Garamond, Georgia, serif",
+                fontWeight: 300,
+                fontSize: "clamp(2rem, 5vw, 3.25rem)",
+                lineHeight: 1.2,
+                color: "#1A1A1A",
+              }}>
                 The Lily and{" "}
-                <em className="not-italic text-accent">XP Symbol</em>
+                <em style={{ fontStyle: "normal", color: "#C7A06C" }}>XP Symbol</em>
               </h2>
-            </motion.div>
+            </div>
 
-            {/* Decorative rule */}
-            <motion.div
-              className="w-12 h-px bg-accent"
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true, amount: 0.1 }}
-              style={{ transformOrigin: "left" }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-            />
+            <div className="scale-line reveal" />
 
-            <motion.div
-              className="flex flex-col gap-6 text-muted font-sans font-light text-base leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-            >
+            <div className="reveal reveal-delay-1" style={{
+              display: "flex", flexDirection: "column", gap: "1.1rem",
+              fontFamily: "Inter Variable, Inter, sans-serif",
+              fontWeight: 300,
+              fontSize: "clamp(0.9rem, 2vw, 1rem)",
+              lineHeight: 1.8,
+              color: "#666666",
+            }}>
               <p>
                 In the center is the{" "}
-                <strong className="font-medium text-foreground">Chi-Rho (XP)</strong>,
+                <strong style={{ fontWeight: 500, color: "#1A1A1A" }}>Chi-Rho (XP)</strong>,
                 one of the earliest Christian symbols representing Christ.
               </p>
               <p>
                 Surrounding it is the{" "}
-                <strong className="font-medium text-foreground">lily</strong>,
-                symbolizing beauty and fragrance — an ancient emblem of purity
-                and the divine presence.
+                <strong style={{ fontWeight: 500, color: "#1A1A1A" }}>lily</strong>,
+                symbolizing beauty and fragrance — an ancient emblem of purity and the divine presence.
               </p>
               <p>
                 The name{" "}
-                <strong className="font-medium text-foreground">Euodia</strong>{" "}
+                <strong style={{ fontWeight: 500, color: "#1A1A1A" }}>Euodia</strong>{" "}
                 means{" "}
-                <em className="italic text-accent">fragrance</em> or{" "}
-                <em className="italic text-accent">prosperous journey</em>.
+                <em style={{ fontStyle: "italic", color: "#C7A06C" }}>fragrance</em> or{" "}
+                <em style={{ fontStyle: "italic", color: "#C7A06C" }}>prosperous journey</em>.
               </p>
               <p>
-                Together these elements express our desire to spread the
-                fragrance of Christ through worship and music — a living,
-                fragrant offering to the Lord.
+                Together these elements express our desire to spread the fragrance of Christ
+                through worship and music — a living, fragrant offering to the Lord.
               </p>
-            </motion.div>
+            </div>
           </div>
         </div>
 
-        {/* Bottom ornamental line */}
-        <motion.div
-          className="ornament-line mt-20"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 1 }}
-        >
-          <span className="font-serif italic text-xs text-muted px-4">
+        <div className="ornament reveal" style={{ marginTop: "4rem", marginBottom: 0 }}>
+          <span style={{
+            fontFamily: "Cormorant Garamond, Georgia, serif",
+            fontStyle: "italic",
+            fontSize: "0.8rem",
+            color: "#888",
+            padding: "0 1rem",
+          }}>
             εὐωδία — A fragrant aroma
           </span>
-        </motion.div>
+        </div>
+
       </div>
     </section>
   );
