@@ -93,3 +93,14 @@ button {
   background: linear-gradient(to right, transparent, var(--color-accent), transparent);
   opacity: 0.5;
 }
+
+/* Hero CSS animations — replaces Framer Motion so content is never stuck invisible */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-item {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards;
+}
