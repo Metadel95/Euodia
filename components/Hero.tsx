@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { ChevronDown } from "lucide-react";
 
 const LOGO_URL = "https://res.cloudinary.com/dgxqifwdf/image/upload/v1781176122/Artboard_8_4x_ql3h3l.png";
-const VIDEO_URL = "https://res.cloudinary.com/dgxqifwdf/video/upload/v1781178408/euodia-hero_odzakp.mp4";
+const VIDEO_URL = "https://res.cloudinary.com/dgxqifwdf/video/upload/v1781292143/AQM_xcYBJXwjeIvrLbdMiPKL1pVmzeYsbgPZTR8bfiUOW_YLWxnnEzHQSmy0xac_xkrrlg.mp4";
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
