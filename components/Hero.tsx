@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { ChevronDown } from "lucide-react";
+import LiquidButton from "@/components/liquid-glass-button";
 
 const LOGO_URL = "https://res.cloudinary.com/dgxqifwdf/image/upload/v1781176122/Artboard_8_4x_ql3h3l.png";
 const VIDEO_URL = "https://res.cloudinary.com/dgxqifwdf/video/upload/v1781292143/AQM_xcYBJXwjeIvrLbdMiPKL1pVmzeYsbgPZTR8bfiUOW_YLWxnnEzHQSmy0xac_xkrrlg.mp4";
@@ -110,40 +111,14 @@ export default function Hero() {
         </p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", width: "100%", maxWidth: "22rem" }}>
-          <button
-            onClick={() => scrollTo("journey")}
-            style={{
-              padding: "1rem 2rem",
-              background: "#000000",
-              color: "#fff",
-              border: "none",
-              fontFamily: "Inter Variable, Inter, sans-serif",
-              fontSize: "0.75rem",
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              cursor: "pointer",
-              width: "100%",
-            }}
-          >
+          <LiquidButton onClick={() => scrollTo("journey")}>
+
             Join the Journey
-          </button>
-          <button
-            onClick={() => scrollTo("meaning")}
-            style={{
-              padding: "1rem 2rem",
-              background: "transparent",
-              color: "#fff",
-              border: "1px solid rgba(255,255,255,0.35)",
-              fontFamily: "Inter Variable, Inter, sans-serif",
-              fontSize: "0.75rem",
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              cursor: "pointer",
-              width: "100%",
-            }}
-          >
+          </LiquidButton>
+          <LiquidButton onClick={() => scrollTo("meaning")}>
+            
             Learn Our Story
-          </button>
+          </LiquidButton>
         </div>
       </div>
 
