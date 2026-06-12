@@ -99,7 +99,7 @@ export default function CTA() {
           <span style={{
             fontFamily: "Inter Variable, Inter, sans-serif",
             fontSize: "0.68rem", letterSpacing: "0.3em",
-            textTransform: "uppercase", color: "#C7A06C",
+            textTransform: "uppercase", color: "#ffffff",
             whiteSpace: "nowrap",
           }}>
             Come and See
@@ -110,7 +110,7 @@ export default function CTA() {
           <span style={{
             fontFamily: "Inter Variable, Inter, sans-serif",
             fontSize: "0.7rem", letterSpacing: "0.3em",
-            textTransform: "uppercase", color: "#C7A06C",
+            textTransform: "uppercase", color: "#ffffff",
             display: "block", marginBottom: "1rem",
           }}>
             Worship with Us

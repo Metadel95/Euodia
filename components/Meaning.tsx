@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-const LOGO_URL = "https://res.cloudinary.com/dgxqifwdf/image/upload/v1781176122/Artboard_8_4x_ql3h3l.png";
+const LOGO_URL = "https://res.cloudinary.com/dgxqifwdf/image/upload/v1781195838/Artboard_5_4x_cszeny.png";
 
 export default function Meaning() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -82,7 +82,7 @@ export default function Meaning() {
           <span style={{
             fontFamily: "Inter Variable, Inter, sans-serif",
             fontSize: "0.7rem", letterSpacing: "0.3em",
-            textTransform: "uppercase", color: "#C7A06C",
+            textTransform: "uppercase", color: "#000000",
             padding: "0 1rem",
           }}>
             Our Symbol
@@ -95,7 +95,7 @@ export default function Meaning() {
             <div style={{ position: "relative" }}>
               <div style={{
                 position: "absolute", inset: 0,
-                background: "#C7A06C",
+                background: "#000000",
                 borderRadius: "50%",
                 filter: "blur(48px)",
                 opacity: 0.18,
@@ -120,7 +120,7 @@ export default function Meaning() {
               <span style={{
                 fontFamily: "Inter Variable, Inter, sans-serif",
                 fontSize: "0.7rem", letterSpacing: "0.3em",
-                textTransform: "uppercase", color: "#C7A06C",
+                textTransform: "uppercase", color: "#000000",
                 display: "block", marginBottom: "1rem",
               }}>
                 The Meaning of Euodia
@@ -133,7 +133,7 @@ export default function Meaning() {
                 color: "#1A1A1A",
               }}>
                 The Lily and{" "}
-                <em style={{ fontStyle: "normal", color: "#C7A06C" }}>XP Symbol</em>
+                <em style={{ fontStyle: "normal", color: "#000000" }}>XP Symbol</em>
               </h2>
             </div>
 
@@ -161,8 +161,8 @@ export default function Meaning() {
                 The name{" "}
                 <strong style={{ fontWeight: 500, color: "#1A1A1A" }}>Euodia</strong>{" "}
                 means{" "}
-                <em style={{ fontStyle: "italic", color: "#C7A06C" }}>fragrance</em> or{" "}
-                <em style={{ fontStyle: "italic", color: "#C7A06C" }}>prosperous journey</em>.
+                <em style={{ fontStyle: "italic", color: "#000000" }}>fragrance</em> or{" "}
+                <em style={{ fontStyle: "italic", color: "#000000" }}>prosperous journey</em>.
               </p>
               <p>
                 Together these elements express our desire to spread the fragrance of Christ

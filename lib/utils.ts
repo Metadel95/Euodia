@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const SOCIAL_LINKS = {
-  instagram: "https://instagram.com/euodiaworships",
+  instagram: "https://www.instagram.com/euodia_songs/",
   youtube: "https://youtube.com/@euodiaworships",
   email: "mailto:hello@euodia.worship",
 } as const;

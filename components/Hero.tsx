@@ -79,7 +79,7 @@ export default function Hero() {
           textTransform: "uppercase", color: "#DFC099",
           marginBottom: "1.25rem", display: "block",
         }}>
-          A Worship Collective
+          Euodia Songs
         </span>
 
         <h1 style={{
@@ -114,7 +114,7 @@ export default function Hero() {
             onClick={() => scrollTo("journey")}
             style={{
               padding: "1rem 2rem",
-              background: "#C7A06C",
+              background: "#000000",
               color: "#fff",
               border: "none",
               fontFamily: "Inter Variable, Inter, sans-serif",

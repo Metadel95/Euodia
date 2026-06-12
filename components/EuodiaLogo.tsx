@@ -11,7 +11,7 @@ export default function EuodiaLogo({
   light = false,
   showWordmark = false,
 }: EuodiaLogoProps) {
-  const goldColor = "#C7A06C";
+  const goldColor = "#000000";
   const textColor = light ? "#FFFFFF" : "#1A1A1A";
 
   return (
