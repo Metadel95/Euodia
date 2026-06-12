@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Instagram, Youtube, Mail } from "lucide-react";
 import { SOCIAL_LINKS } from "@/lib/utils";
 
@@ -8,73 +7,64 @@ const LOGO_URL = "https://res.cloudinary.com/dgxqifwdf/image/upload/v1781176122/
 
 const socialLinks = [
   { label: "Instagram", href: SOCIAL_LINKS.instagram, icon: Instagram },
-  { label: "YouTube", href: SOCIAL_LINKS.youtube, icon: Youtube },
-  { label: "Email", href: SOCIAL_LINKS.email, icon: Mail },
+  { label: "YouTube",   href: SOCIAL_LINKS.youtube,   icon: Youtube   },
+  { label: "Email",     href: SOCIAL_LINKS.email,      icon: Mail      },
 ];
 
 export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer
-      className="bg-background border-t border-foreground/8 py-12 px-6"
-      aria-label="Site footer"
-    >
-      <div className="max-w-6xl mx-auto flex flex-col items-center gap-8">
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="flex flex-col items-center gap-2"
-        >
-          <img
-            src={LOGO_URL}
-            alt="Euodia"
-            className="w-12 h-12 object-contain"
-          />
-          <span className="font-serif tracking-widest uppercase text-sm font-light text-foreground">
-            Euodia
-          </span>
-        </motion.div>
+    <footer style={{
+      background: "#F8F5EF",
+      borderTop: "1px solid rgba(26,26,26,0.08)",
+      padding: "3rem 1.5rem",
+    }}>
+      <div style={{
+        maxWidth: "72rem", margin: "0 auto",
+        display: "flex", flexDirection: "column",
+        alignItems: "center", gap: "1.5rem",
+      }}>
+        <img
+          src={LOGO_URL}
+          alt="Euodia"
+          style={{ width: "2.5rem", height: "2.5rem", objectFit: "contain" }}
+        />
 
-        <motion.nav
-          aria-label="Social media links"
-          className="flex items-center gap-6"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-        >
+        <nav aria-label="Social links" style={{ display: "flex", gap: "1.5rem" }}>
           {socialLinks.map(({ label, href, icon: Icon }) => (
             <a
               key={label}
               href={href}
               target={href.startsWith("http") ? "_blank" : undefined}
               rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-              aria-label={`Follow Euodia on ${label}`}
-              className="text-muted hover:text-accent transition-colors duration-300"
+              aria-label={label}
+              style={{ color: "#888", transition: "color 0.2s ease" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#C7A06C")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#888")}
             >
-              <Icon size={18} strokeWidth={1.5} />
+              <Icon size={17} strokeWidth={1.5} />
             </a>
           ))}
-        </motion.nav>
+        </nav>
 
-        <motion.div
-          className="flex flex-col sm:flex-row items-center gap-2 text-center"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-        >
-          <p className="font-sans text-xs text-muted">
+        <div style={{
+          display: "flex", flexDirection: "column", alignItems: "center",
+          gap: "0.25rem", textAlign: "center",
+        }}>
+          <p style={{
+            fontFamily: "Inter Variable, Inter, sans-serif",
+            fontSize: "0.75rem", color: "#888",
+          }}>
             &copy; {year} Euodia. All rights reserved.
           </p>
-          <span className="hidden sm:inline text-muted/40 text-xs">·</span>
-          <p className="font-sans text-xs text-muted/60 font-light italic">
+          <p style={{
+            fontFamily: "Cormorant Garamond, Georgia, serif",
+            fontStyle: "italic", fontSize: "0.8rem", color: "#aaa",
+          }}>
             Made with devotion.
           </p>
-        </motion.div>
+        </div>
       </div>
     </footer>
   );
