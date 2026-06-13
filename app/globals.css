@@ -76,6 +76,12 @@ button {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+  /* Ensure elements are visible even if animations don't fire */
+  .reveal,
+  .cta-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 /* Utility: ornamental divider */
@@ -92,4 +98,62 @@ button {
   height: 1px;
   background: linear-gradient(to right, transparent, var(--color-accent), transparent);
   opacity: 0.5;
+}
+
+/* ── Reveal animations (Meaning + CTA sections) ── */
+/* Defined here in globals so they're guaranteed loaded on all devices */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.32s; }
+
+.meaning-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3.5rem;
+  align-items: center;
+  max-width: 72rem;
+  margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .meaning-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+  }
+}
+
+.ornament {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 4rem;
+}
+.ornament::before,
+.ornament::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(199,160,108,0.5), transparent);
+}
+
+.scale-line {
+  width: 3rem;
+  height: 1px;
+  background: #C7A06C;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+}
+.scale-line.visible {
+  transform: scaleX(1);
 }

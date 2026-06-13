@@ -14,11 +14,16 @@ export default function CTA() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const els = sectionRef.current?.querySelectorAll<HTMLElement>(".reveal");
+    const els = sectionRef.current?.querySelectorAll<HTMLElement>(".cta-reveal");
     if (!els) return;
     const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add("visible")),
-      { threshold: 0.08 }
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("visible");
+          observer.unobserve(e.target);
+        }
+      }),
+      { threshold: 0.05, rootMargin: "0px 0px -30px 0px" }
     );
     els.forEach((el) => observer.observe(el));
     return () => observer.disconnect();

@@ -11,8 +11,13 @@ export default function Meaning() {
     const els = sectionRef.current?.querySelectorAll<HTMLElement>(".reveal");
     if (!els) return;
     const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add("visible")),
-      { threshold: 0.08 }
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("visible");
+          observer.unobserve(e.target);
+        }
+      }),
+      { threshold: 0.05, rootMargin: "0px 0px -30px 0px" }
     );
     els.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
@@ -24,58 +29,6 @@ export default function Meaning() {
       ref={sectionRef}
       style={{ background: "#F8F5EF", padding: "6rem 1.5rem" }}
     >
-      <style>{`
-        .reveal {
-          opacity: 0;
-          transform: translateY(28px);
-          transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1);
-        }
-        .reveal.visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-        .reveal-delay-1 { transition-delay: 0.1s; }
-        .reveal-delay-2 { transition-delay: 0.2s; }
-        .reveal-delay-3 { transition-delay: 0.32s; }
-        .meaning-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 3.5rem;
-          align-items: center;
-          max-width: 72rem;
-          margin: 0 auto;
-        }
-        @media (min-width: 768px) {
-          .meaning-grid {
-            grid-template-columns: 1fr 1fr;
-            gap: 5rem;
-          }
-        }
-        .ornament {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          margin-bottom: 4rem;
-        }
-        .ornament::before, .ornament::after {
-          content: "";
-          flex: 1;
-          height: 1px;
-          background: linear-gradient(to right, transparent, rgba(199,160,108,0.5), transparent);
-        }
-        .scale-line {
-          width: 3rem;
-          height: 1px;
-          background: #C7A06C;
-          transform: scaleX(0);
-          transform-origin: left;
-          transition: transform 0.7s cubic-bezier(0.16,1,0.3,1) 0.15s;
-        }
-        .scale-line.visible {
-          transform: scaleX(1);
-        }
-      `}</style>
-
       <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
 
         <div className="ornament reveal">

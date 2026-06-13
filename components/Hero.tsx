@@ -13,6 +13,11 @@ export default function Hero() {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+    // Must set muted programmatically for iOS autoplay policy
+    video.muted = true;
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+    video.load();
     video.play().catch(() => {});
   }, []);
 
@@ -112,11 +117,9 @@ export default function Hero() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", width: "100%", maxWidth: "22rem" }}>
           <LiquidButton onClick={() => scrollTo("journey")}>
-
             Join the Journey
           </LiquidButton>
           <LiquidButton onClick={() => scrollTo("meaning")}>
-            
             Learn Our Story
           </LiquidButton>
         </div>
