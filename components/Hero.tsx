@@ -8,54 +8,29 @@ import LiquidButton from "@/components/liquid-glass-button";
 const LOGO_URL = "https://res.cloudinary.com/dgxqifwdf/image/upload/v1781176122/Artboard_8_4x_ql3h3l.png";
 const VIDEO_URL = "https://res.cloudinary.com/dgxqifwdf/video/upload/v1781292143/AQM_xcYBJXwjeIvrLbdMiPKL1pVmzeYsbgPZTR8bfiUOW_YLWxnnEzHQSmy0xac_xkrrlg.mp4";
 
-// ── Blurred stagger animation variants ──
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.015 },
-  },
-};
+const LINE1 = "Spreading the Fragrance of Christ";
+const LINE2 = "Through Music and Worship";
 
-const letterAnimation = {
-  hidden: { opacity: 0, filter: "blur(10px)" },
-  show:   { opacity: 1, filter: "blur(0px)"  },
-};
-
-// ── Fade-up variants for logo, eyebrow, paragraph, buttons ──
 const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 18 },
   show:   { opacity: 1, y: 0  },
 };
 
-// Reusable blurred stagger text
-function BlurredStagger({
-  text,
-  style,
-  as: Tag = "span",
-}: {
-  text: string;
-  style?: React.CSSProperties;
-  as?: "h1" | "h2" | "p" | "span";
-}) {
+function BlurredStagger({ text, delay = 0 }: { text: string; delay?: number }) {
   return (
-    <motion.span
-      variants={container}
-      initial="hidden"
-      animate="show"
-      style={{ display: "block", ...style }}
-    >
+    <>
       {text.split("").map((char, i) => (
         <motion.span
           key={i}
-          variants={letterAnimation}
-          transition={{ duration: 0.35 }}
+          initial={{ opacity: 0, filter: "blur(10px)" }}
+          animate={{ opacity: 1, filter: "blur(0px)" }}
+          transition={{ duration: 0.35, delay: delay + i * 0.018 }}
           style={{ display: "inline" }}
         >
           {char === " " ? "\u00A0" : char}
         </motion.span>
       ))}
-    </motion.span>
+    </>
   );
 }
 
@@ -89,7 +64,7 @@ export default function Hero() {
         overflow: "hidden",
       }}
     >
-      {/* Always-visible dark base */}
+      {/* Dark base */}
       <div style={{
         position: "absolute", inset: 0, zIndex: 0,
         background: "linear-gradient(160deg, #0e0c0a 0%, #1a1410 50%, #0a0908 100%)"
@@ -120,35 +95,36 @@ export default function Hero() {
         position: "relative", zIndex: 10,
         display: "flex", flexDirection: "column", alignItems: "center",
         textAlign: "center",
-        padding: "2rem 1.5rem",
-        width: "100%", maxWidth: "56rem",
+        padding: "5rem 1.5rem 3rem",
+        width: "100%", maxWidth: "52rem",
         margin: "0 auto",
+        boxSizing: "border-box",
       }}>
 
-        {/* Logo — fade up */}
+        {/* Logo */}
         <motion.img
           src={LOGO_URL}
           alt="Euodia logo"
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
           style={{
-            width: "5rem", height: "5rem", objectFit: "contain",
-            marginBottom: "2.5rem",
+            width: "clamp(3.5rem, 10vw, 5rem)",
+            height: "clamp(3.5rem, 10vw, 5rem)",
+            objectFit: "contain",
+            marginBottom: "2rem",
             filter: "drop-shadow(0 4px 24px rgba(199,160,108,0.3))",
           }}
         />
 
-        {/* Eyebrow — fade up */}
+        {/* Eyebrow */}
         <motion.span
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.25 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.3 }}
           style={{
             fontFamily: "Inter Variable, Inter, sans-serif",
-            fontSize: "0.7rem", letterSpacing: "0.3em",
+            fontSize: "0.68rem", letterSpacing: "0.3em",
             textTransform: "uppercase", color: "#DFC099",
             marginBottom: "1.25rem", display: "block",
           }}
@@ -156,51 +132,55 @@ export default function Hero() {
           Euodia Songs
         </motion.span>
 
-        {/* Headline — blurred stagger */}
+        {/* Headline — blurred stagger, split into 2 lines */}
         <h1 style={{
           fontFamily: "Cormorant Garamond, Georgia, serif",
           fontWeight: 300,
-          fontSize: "clamp(2rem, 6vw, 4.5rem)",
-          lineHeight: 1.15,
+          fontSize: "clamp(1.75rem, 5vw, 4rem)",
+          lineHeight: 1.2,
           color: "#ffffff",
-          marginBottom: "1.5rem",
+          marginBottom: "1.25rem",
           letterSpacing: "-0.01em",
-          margin: "0 0 1.5rem",
+          width: "100%",
+          wordBreak: "break-word",
+          overflowWrap: "break-word",
         }}>
-          <BlurredStagger
-            text="Spreading the Fragrance of Christ
-            Through Music and Worship"
-            style={{ lineHeight: 1.15 }}
-          />
+          <span style={{ display: "block" }}>
+            <BlurredStagger text={LINE1} delay={0.45} />
+          </span>
+          <span style={{ display: "block" }}>
+            <BlurredStagger text={LINE2} delay={0.45 + LINE1.length * 0.018 + 0.05} />
+          </span>
         </h1>
 
-        {/* Subheading — fade up, delayed after headline */}
+        {/* Subheading */}
         <motion.p
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 1.2 }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 1.6 }}
           style={{
             fontFamily: "Inter Variable, Inter, sans-serif",
             fontWeight: 300,
-            fontSize: "clamp(0.95rem, 2.5vw, 1.125rem)",
+            fontSize: "clamp(0.88rem, 2.2vw, 1.05rem)",
             lineHeight: 1.75,
             color: "rgba(255,255,255,0.7)",
-            maxWidth: "38rem",
-            marginBottom: "2.5rem",
+            maxWidth: "34rem",
+            marginBottom: "2.25rem",
           }}
         >
           Euodia is a worship collective devoted to sharing the beauty of Christ
           through music, community, and worship.
         </motion.p>
 
-        {/* Buttons — fade up */}
+        {/* Buttons */}
         <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 1.45 }}
-          style={{ display: "flex", flexDirection: "column", gap: "0.75rem", width: "100%", maxWidth: "22rem" }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 1.85 }}
+          style={{
+            display: "flex", flexDirection: "column",
+            gap: "0.75rem", width: "100%", maxWidth: "20rem",
+          }}
         >
           <LiquidButton onClick={() => scrollTo("journey")}>
             Join the Journey
@@ -217,7 +197,7 @@ export default function Hero() {
         aria-label="Scroll down"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.8, duration: 0.8 }}
+        transition={{ delay: 2.1, duration: 0.8 }}
         style={{
           position: "absolute", bottom: "1.5rem",
           left: "50%", transform: "translateX(-50%)",
