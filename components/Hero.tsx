@@ -168,7 +168,8 @@ export default function Hero() {
           margin: "0 0 1.5rem",
         }}>
           <BlurredStagger
-            text="Spreading the Fragrance of Christ Through Music and Worship"
+            text="Spreading the Fragrance of Christ
+            Through Music and Worship"
             style={{ lineHeight: 1.15 }}
           />
         </h1>
