@@ -121,30 +121,6 @@ export default function Hero() {
           </LiquidButton>
         </div>
       </div>
-
-      
-
-      {/* Scroll indicator */}
-      <button
-        onClick={() => scrollTo("meaning")}
-        aria-label="Scroll down"
-        style={{
-          position: "absolute", bottom: "2rem",
-          left: "50%", transform: "translateX(-50%)",
-          zIndex: 10, background: "none", border: "none",
-          color: "rgba(255,255,255,0.45)", cursor: "pointer",
-          animation: "bounce 2s ease-in-out infinite",
-        }}
-      >
-        <ChevronDown size={24} strokeWidth={1.5} />
-      </button>
-
-      <style>{`
-        @keyframes bounce {
-          0%, 100% { transform: translateX(-50%) translateY(0); }
-          50% { transform: translateX(-50%) translateY(7px); }
-        }
-      `}</style>
     </section>
   );
 }
