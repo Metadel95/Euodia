@@ -1,31 +1,66 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import LiquidButton from "@/components/liquid-glass-button";
 
 const LOGO_URL = "https://res.cloudinary.com/dgxqifwdf/image/upload/v1781176122/Artboard_8_4x_ql3h3l.png";
 const VIDEO_URL = "https://res.cloudinary.com/dgxqifwdf/video/upload/v1781292143/AQM_xcYBJXwjeIvrLbdMiPKL1pVmzeYsbgPZTR8bfiUOW_YLWxnnEzHQSmy0xac_xkrrlg.mp4";
 
-const LINE1 = "Spreading the Fragrance of Christ";
-const LINE2 = "Through Music and Worship";
-
-const sequenceVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+// ── Blurred stagger animation variants ──
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.015 },
   },
 };
 
-const fadeUpVariants: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } },
+const letterAnimation = {
+  hidden: { opacity: 0, filter: "blur(10px)" },
+  show:   { opacity: 1, filter: "blur(0px)"  },
 };
+
+// ── Fade-up variants for logo, eyebrow, paragraph, buttons ──
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  show:   { opacity: 1, y: 0  },
+};
+
+// Reusable blurred stagger text
+function BlurredStagger({
+  text,
+  style,
+  as: Tag = "span",
+}: {
+  text: string;
+  style?: React.CSSProperties;
+  as?: "h1" | "h2" | "p" | "span";
+}) {
+  return (
+    <motion.span
+      variants={container}
+      initial="hidden"
+      animate="show"
+      style={{ display: "block", ...style }}
+    >
+      {text.split("").map((char, i) => (
+        <motion.span
+          key={i}
+          variants={letterAnimation}
+          transition={{ duration: 0.35 }}
+          style={{ display: "inline" }}
+        >
+          {char === " " ? "\u00A0" : char}
+        </motion.span>
+      ))}
+    </motion.span>
+  );
+}
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     const video = videoRef.current;
@@ -54,18 +89,13 @@ export default function Hero() {
         overflow: "hidden",
       }}
     >
-      <style>{`
-        @keyframes heroBounce {
-          0%, 100% { transform: translateX(-50%) translateY(0); }
-          50%       { transform: translateX(-50%) translateY(7px); }
-        }
-      `}</style>
-
+      {/* Always-visible dark base */}
       <div style={{
         position: "absolute", inset: 0, zIndex: 0,
         background: "linear-gradient(160deg, #0e0c0a 0%, #1a1410 50%, #0a0908 100%)"
       }} />
 
+      {/* Video */}
       <video
         ref={videoRef}
         autoPlay loop muted playsInline preload="auto"
@@ -78,45 +108,47 @@ export default function Hero() {
         <source src={VIDEO_URL} type="video/mp4" />
       </video>
 
+      {/* Overlays */}
       <div style={{ position: "absolute", inset: 0, zIndex: 2, background: "rgba(0,0,0,0.58)" }} />
       <div style={{
         position: "absolute", inset: 0, zIndex: 2,
         background: "radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.55) 100%)"
       }} />
 
-      <motion.div
-        initial={reduceMotion ? "visible" : "hidden"}
-        animate="visible"
-        variants={sequenceVariants}
-        style={{
-          position: "relative", zIndex: 10,
-          display: "flex", flexDirection: "column", alignItems: "center",
-          textAlign: "center",
-          padding: "5rem 1.5rem 3rem",
-          width: "100%", maxWidth: "52rem",
-          margin: "0 auto",
-          boxSizing: "border-box",
-        }}
-      >
+      {/* Content */}
+      <div style={{
+        position: "relative", zIndex: 10,
+        display: "flex", flexDirection: "column", alignItems: "center",
+        textAlign: "center",
+        padding: "2rem 1.5rem",
+        width: "100%", maxWidth: "56rem",
+        margin: "0 auto",
+      }}>
 
+        {/* Logo — fade up */}
         <motion.img
-          variants={fadeUpVariants}
           src={LOGO_URL}
           alt="Euodia logo"
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
           style={{
-            width: "clamp(3.5rem, 10vw, 5rem)",
-            height: "clamp(3.5rem, 10vw, 5rem)",
-            objectFit: "contain",
-            marginBottom: "2rem",
+            width: "5rem", height: "5rem", objectFit: "contain",
+            marginBottom: "2.5rem",
             filter: "drop-shadow(0 4px 24px rgba(199,160,108,0.3))",
           }}
         />
 
+        {/* Eyebrow — fade up */}
         <motion.span
-          variants={fadeUpVariants}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.25 }}
           style={{
             fontFamily: "Inter Variable, Inter, sans-serif",
-            fontSize: "0.68rem", letterSpacing: "0.3em",
+            fontSize: "0.7rem", letterSpacing: "0.3em",
             textTransform: "uppercase", color: "#DFC099",
             marginBottom: "1.25rem", display: "block",
           }}
@@ -124,45 +156,50 @@ export default function Hero() {
           Euodia Songs
         </motion.span>
 
-        <motion.h1
-          variants={fadeUpVariants}
-          style={{
-            fontFamily: "Cormorant Garamond, Georgia, serif",
-            fontWeight: 300,
-            fontSize: "clamp(1.75rem, 5vw, 4rem)",
-            lineHeight: 1.2,
-            color: "#ffffff",
-            marginBottom: "1.25rem",
-            letterSpacing: "-0.01em",
-            width: "100%",
-          }}
-        >
-          <span style={{ display: "block" }}>{LINE1}</span>
-          <span style={{ display: "block" }}>{LINE2}</span>
-        </motion.h1>
+        {/* Headline — blurred stagger */}
+        <h1 style={{
+          fontFamily: "Cormorant Garamond, Georgia, serif",
+          fontWeight: 300,
+          fontSize: "clamp(2rem, 6vw, 4.5rem)",
+          lineHeight: 1.15,
+          color: "#ffffff",
+          marginBottom: "1.5rem",
+          letterSpacing: "-0.01em",
+          margin: "0 0 1.5rem",
+        }}>
+          <BlurredStagger
+            text="Spreading the Fragrance of Christ Through Music and Worship"
+            style={{ lineHeight: 1.15 }}
+          />
+        </h1>
 
+        {/* Subheading — fade up, delayed after headline */}
         <motion.p
-          variants={fadeUpVariants}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 1.2 }}
           style={{
             fontFamily: "Inter Variable, Inter, sans-serif",
             fontWeight: 300,
-            fontSize: "clamp(0.88rem, 2.2vw, 1.05rem)",
+            fontSize: "clamp(0.95rem, 2.5vw, 1.125rem)",
             lineHeight: 1.75,
             color: "rgba(255,255,255,0.7)",
-            maxWidth: "34rem",
-            marginBottom: "2.25rem",
+            maxWidth: "38rem",
+            marginBottom: "2.5rem",
           }}
         >
           Euodia is a worship collective devoted to sharing the beauty of Christ
           through music, community, and worship.
         </motion.p>
 
+        {/* Buttons — fade up */}
         <motion.div
-          variants={fadeUpVariants}
-          style={{
-            display: "flex", flexDirection: "column",
-            gap: "0.75rem", width: "100%", maxWidth: "20rem",
-          }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 1.45 }}
+          style={{ display: "flex", flexDirection: "column", gap: "0.75rem", width: "100%", maxWidth: "22rem" }}
         >
           <LiquidButton onClick={() => scrollTo("journey")}>
             Join the Journey
@@ -171,22 +208,26 @@ export default function Hero() {
             Learn Our Story
           </LiquidButton>
         </motion.div>
+      </div>
 
-        <motion.button
-          variants={fadeUpVariants}
-          onClick={() => scrollTo("meaning")}
-          aria-label="Scroll down"
-          style={{
-            marginTop: "2.5rem",
-            background: "none", border: "none",
-            color: "rgba(255,255,255,0.45)", cursor: "pointer",
-            padding: "0.5rem",
-            animation: reduceMotion ? "none" : "heroBounce 2s ease-in-out 2s infinite",
-          }}
-        >
-          <ChevronDown size={22} strokeWidth={1.5} />
-        </motion.button>
-      </motion.div>
+      {/* Scroll indicator */}
+      <motion.button
+        onClick={() => scrollTo("meaning")}
+        aria-label="Scroll down"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.8, duration: 0.8 }}
+        style={{
+          position: "absolute", bottom: "1.5rem",
+          left: "50%", transform: "translateX(-50%)",
+          zIndex: 10, background: "none", border: "none",
+          color: "rgba(255,255,255,0.45)", cursor: "pointer",
+          animation: "bounce 2s ease-in-out infinite",
+          padding: "0.5rem",
+        }}
+      >
+        <ChevronDown size={22} strokeWidth={1.5} />
+      </motion.button>
     </section>
   );
 }
