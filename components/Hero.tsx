@@ -8,48 +8,37 @@ import LiquidButton from "@/components/liquid-glass-button";
 const LOGO_URL = "https://res.cloudinary.com/dgxqifwdf/image/upload/v1781176122/Artboard_8_4x_ql3h3l.png";
 const VIDEO_URL = "https://res.cloudinary.com/dgxqifwdf/video/upload/v1781292143/AQM_xcYBJXwjeIvrLbdMiPKL1pVmzeYsbgPZTR8bfiUOW_YLWxnnEzHQSmy0xac_xkrrlg.mp4";
 
-// ── Blurred stagger animation variants ──
-const container = {
-  hidden: { opacity: 0 },
+const HEADLINE = "Spreading the Fragrance of Christ Through Music and Worship";
+
+// ── Letter blur-sharpen variants (Framer Motion enhancement) ──
+// Opacity is intentionally NOT animated here — the CSS "heroFadeUp"
+// animation on the parent <h1> already handles visibility/entrance.
+// If Framer Motion fails to mount, letters simply stay at opacity 1,
+// filter: blur(0) — i.e. plain, fully visible text. No invisible state.
+const letterContainer = {
+  hidden: {},
   show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.015 },
+    transition: { staggerChildren: 0.018, delayChildren: 0.05 },
   },
 };
 
 const letterAnimation = {
-  hidden: { opacity: 0, filter: "blur(10px)" },
-  show:   { opacity: 1, filter: "blur(0px)"  },
+  hidden: { filter: "blur(8px)" },
+  show: { filter: "blur(0px)", transition: { duration: 0.5, ease: "easeOut" } },
 };
 
-// ── Fade-up variants for logo, eyebrow, paragraph, buttons ──
-const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  show:   { opacity: 1, y: 0  },
-};
-
-// Reusable blurred stagger text
-function BlurredStagger({
-  text,
-  style,
-  as: Tag = "span",
-}: {
-  text: string;
-  style?: React.CSSProperties;
-  as?: "h1" | "h2" | "p" | "span";
-}) {
+function BlurredStagger({ text }: { text: string }) {
   return (
     <motion.span
-      variants={container}
+      variants={letterContainer}
       initial="hidden"
       animate="show"
-      style={{ display: "block", ...style }}
+      style={{ display: "inline" }}
     >
       {text.split("").map((char, i) => (
         <motion.span
           key={i}
           variants={letterAnimation}
-          transition={{ duration: 0.35 }}
           style={{ display: "inline" }}
         >
           {char === " " ? "\u00A0" : char}
@@ -89,6 +78,38 @@ export default function Hero() {
         overflow: "hidden",
       }}
     >
+      <style>{`
+        @keyframes heroFadeUp {
+          from { opacity: 0; transform: translateY(22px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes heroFadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        @keyframes heroBounce {
+          0%, 100% { transform: translateX(-50%) translateY(0); }
+          50%       { transform: translateX(-50%) translateY(7px); }
+        }
+        .hero-fade-up {
+          opacity: 0;
+          animation: heroFadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .hero-fade-in {
+          opacity: 0;
+          animation: heroFadeIn 0.9s ease forwards;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-fade-up, .hero-fade-in {
+            animation: none;
+            opacity: 1;
+          }
+          .hero-scroll-btn {
+            animation: none !important;
+          }
+        }
+      `}</style>
+
       {/* Always-visible dark base */}
       <div style={{
         position: "absolute", inset: 0, zIndex: 0,
@@ -125,60 +146,53 @@ export default function Hero() {
         margin: "0 auto",
       }}>
 
-        {/* Logo — fade up */}
-        <motion.img
+        {/* Logo — CSS fade up, no JS dependency */}
+        <img
           src={LOGO_URL}
           alt="Euodia logo"
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+          className="hero-fade-up"
           style={{
             width: "5rem", height: "5rem", objectFit: "contain",
             marginBottom: "2.5rem",
             filter: "drop-shadow(0 4px 24px rgba(199,160,108,0.3))",
+            animationDelay: "0.1s",
           }}
         />
 
-        {/* Eyebrow — fade up */}
-        <motion.span
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.25 }}
+        {/* Eyebrow — CSS fade up */}
+        <span
+          className="hero-fade-up"
           style={{
             fontFamily: "Inter Variable, Inter, sans-serif",
             fontSize: "0.7rem", letterSpacing: "0.3em",
             textTransform: "uppercase", color: "#DFC099",
             marginBottom: "1.25rem", display: "block",
+            animationDelay: "0.25s",
           }}
         >
           Euodia Songs
-        </motion.span>
+        </span>
 
-        {/* Headline — blurred stagger */}
-        <h1 style={{
-          fontFamily: "Cormorant Garamond, Georgia, serif",
-          fontWeight: 300,
-          fontSize: "clamp(2rem, 6vw, 4.5rem)",
-          lineHeight: 1.15,
-          color: "#ffffff",
-          marginBottom: "1.5rem",
-          letterSpacing: "-0.01em",
-          margin: "0 0 1.5rem",
-        }}>
-          <BlurredStagger
-            text="Spreading the Fragrance of Christ Through Music and Worship"
-            style={{ lineHeight: 1.15 }}
-          />
+        {/* Headline — CSS fade up (guaranteed) + Framer letter blur-sharpen (enhancement) */}
+        <h1
+          className="hero-fade-up"
+          style={{
+            fontFamily: "Cormorant Garamond, Georgia, serif",
+            fontWeight: 300,
+            fontSize: "clamp(2rem, 6vw, 4.5rem)",
+            lineHeight: 1.15,
+            color: "#ffffff",
+            letterSpacing: "-0.01em",
+            margin: "0 0 1.5rem",
+            animationDelay: "0.4s",
+          }}
+        >
+          <BlurredStagger text={HEADLINE} />
         </h1>
 
-        {/* Subheading — fade up, delayed after headline */}
-        <motion.p
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 1.2 }}
+        {/* Subheading — CSS fade up, after headline */}
+        <p
+          className="hero-fade-up"
           style={{
             fontFamily: "Inter Variable, Inter, sans-serif",
             fontWeight: 300,
@@ -187,19 +201,21 @@ export default function Hero() {
             color: "rgba(255,255,255,0.7)",
             maxWidth: "38rem",
             marginBottom: "2.5rem",
+            animationDelay: "1.2s",
           }}
         >
           Euodia is a worship collective devoted to sharing the beauty of Christ
           through music, community, and worship.
-        </motion.p>
+        </p>
 
-        {/* Buttons — fade up */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 1.45 }}
-          style={{ display: "flex", flexDirection: "column", gap: "0.75rem", width: "100%", maxWidth: "22rem" }}
+        {/* Buttons — CSS fade up */}
+        <div
+          className="hero-fade-up"
+          style={{
+            display: "flex", flexDirection: "column", gap: "0.75rem",
+            width: "100%", maxWidth: "22rem",
+            animationDelay: "1.45s",
+          }}
         >
           <LiquidButton onClick={() => scrollTo("journey")}>
             Join the Journey
@@ -207,27 +223,25 @@ export default function Hero() {
           <LiquidButton onClick={() => scrollTo("meaning")}>
             Learn Our Story
           </LiquidButton>
-        </motion.div>
+        </div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.button
+      {/* Scroll indicator — CSS fade in + bounce */}
+      <button
         onClick={() => scrollTo("meaning")}
         aria-label="Scroll down"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.8, duration: 0.8 }}
+        className="hero-fade-in hero-scroll-btn"
         style={{
           position: "absolute", bottom: "1.5rem",
           left: "50%", transform: "translateX(-50%)",
           zIndex: 10, background: "none", border: "none",
           color: "rgba(255,255,255,0.45)", cursor: "pointer",
-          animation: "bounce 2s ease-in-out infinite",
           padding: "0.5rem",
+          animation: "heroFadeIn 0.9s ease 1.8s forwards, heroBounce 2s ease-in-out 1.8s infinite",
         }}
       >
         <ChevronDown size={22} strokeWidth={1.5} />
-      </motion.button>
+      </button>
     </section>
   );
 }
