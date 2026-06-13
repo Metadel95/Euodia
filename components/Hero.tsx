@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import LiquidButton from "@/components/liquid-glass-button";
 
@@ -9,44 +8,6 @@ const LOGO_URL = "https://res.cloudinary.com/dgxqifwdf/image/upload/v1781176122/
 const VIDEO_URL = "https://res.cloudinary.com/dgxqifwdf/video/upload/v1781292143/AQM_xcYBJXwjeIvrLbdMiPKL1pVmzeYsbgPZTR8bfiUOW_YLWxnnEzHQSmy0xac_xkrrlg.mp4";
 
 const HEADLINE = "Spreading the Fragrance of Christ Through Music and Worship";
-
-// ── Letter blur-sharpen variants (Framer Motion enhancement) ──
-// Opacity is intentionally NOT animated here — the CSS "heroFadeUp"
-// animation on the parent <h1> already handles visibility/entrance.
-// If Framer Motion fails to mount, letters simply stay at opacity 1,
-// filter: blur(0) — i.e. plain, fully visible text. No invisible state.
-const letterContainer = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.018, delayChildren: 0.05 },
-  },
-};
-
-const letterAnimation = {
-  hidden: { filter: "blur(8px)" },
-  show: { filter: "blur(0px)", transition: { duration: 0.5, ease: "easeOut" } },
-};
-
-function BlurredStagger({ text }: { text: string }) {
-  return (
-    <motion.span
-      variants={letterContainer}
-      initial="hidden"
-      animate="show"
-      style={{ display: "inline" }}
-    >
-      {text.split("").map((char, i) => (
-        <motion.span
-          key={i}
-          variants={letterAnimation}
-          style={{ display: "inline" }}
-        >
-          {char === " " ? "\u00A0" : char}
-        </motion.span>
-      ))}
-    </motion.span>
-  );
-}
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -83,6 +44,10 @@ export default function Hero() {
           from { opacity: 0; transform: translateY(22px); }
           to   { opacity: 1; transform: translateY(0); }
         }
+        @keyframes heroFadeBlur {
+          from { opacity: 0; transform: translateY(22px); filter: blur(8px); }
+          to   { opacity: 1; transform: translateY(0); filter: blur(0px); }
+        }
         @keyframes heroFadeIn {
           from { opacity: 0; }
           to   { opacity: 1; }
@@ -95,14 +60,21 @@ export default function Hero() {
           opacity: 0;
           animation: heroFadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
+        .hero-headline {
+          opacity: 0;
+          animation: heroFadeBlur 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+          will-change: opacity, transform, filter;
+        }
         .hero-fade-in {
           opacity: 0;
           animation: heroFadeIn 0.9s ease forwards;
         }
         @media (prefers-reduced-motion: reduce) {
-          .hero-fade-up, .hero-fade-in {
+          .hero-fade-up, .hero-fade-in, .hero-headline {
             animation: none;
             opacity: 1;
+            filter: none;
+            transform: none;
           }
           .hero-scroll-btn {
             animation: none !important;
@@ -146,7 +118,7 @@ export default function Hero() {
         margin: "0 auto",
       }}>
 
-        {/* Logo — CSS fade up, no JS dependency */}
+        {/* Logo — fade up */}
         <img
           src={LOGO_URL}
           alt="Euodia logo"
@@ -159,7 +131,7 @@ export default function Hero() {
           }}
         />
 
-        {/* Eyebrow — CSS fade up */}
+        {/* Eyebrow — fade up */}
         <span
           className="hero-fade-up"
           style={{
@@ -173,9 +145,9 @@ export default function Hero() {
           Euodia Songs
         </span>
 
-        {/* Headline — CSS fade up (guaranteed) + Framer letter blur-sharpen (enhancement) */}
+        {/* Headline — single fade + blur-to-sharp, cheap on mobile */}
         <h1
-          className="hero-fade-up"
+          className="hero-headline"
           style={{
             fontFamily: "Cormorant Garamond, Georgia, serif",
             fontWeight: 300,
@@ -187,10 +159,10 @@ export default function Hero() {
             animationDelay: "0.4s",
           }}
         >
-          <BlurredStagger text={HEADLINE} />
+          {HEADLINE}
         </h1>
 
-        {/* Subheading — CSS fade up, after headline */}
+        {/* Subheading — fade up, after headline */}
         <p
           className="hero-fade-up"
           style={{
@@ -208,7 +180,7 @@ export default function Hero() {
           through music, community, and worship.
         </p>
 
-        {/* Buttons — CSS fade up */}
+        {/* Buttons — fade up */}
         <div
           className="hero-fade-up"
           style={{
@@ -226,11 +198,11 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll indicator — CSS fade in + bounce */}
+      {/* Scroll indicator — fade in + bounce */}
       <button
         onClick={() => scrollTo("meaning")}
         aria-label="Scroll down"
-        className="hero-fade-in hero-scroll-btn"
+        className="hero-scroll-btn"
         style={{
           position: "absolute", bottom: "1.5rem",
           left: "50%", transform: "translateX(-50%)",
