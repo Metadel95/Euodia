@@ -11,57 +11,17 @@ const VIDEO_URL = "https://res.cloudinary.com/dgxqifwdf/video/upload/v1781292143
 const LINE1 = "Spreading the Fragrance of Christ";
 const LINE2 = "Through Music and Worship";
 
-const EASE = [0.16, 1, 0.3, 1] as const;
-
 const sequenceVariants: Variants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.15, delayChildren: 0.1 },
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 },
   },
 };
 
 const fadeUpVariants: Variants = {
-  hidden: { opacity: 0, y: 14 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } },
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } },
 };
-
-const linesVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.3 },
-  },
-};
-
-const lineVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.07 },
-  },
-};
-
-const wordVariants: Variants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: EASE } },
-};
-
-function StaggerLine({ text }: { text: string }) {
-  return (
-    <motion.span
-      variants={lineVariants}
-      style={{ display: "block" }}
-    >
-      {text.split(" ").map((word, i) => (
-        <motion.span
-          key={i}
-          variants={wordVariants}
-          style={{ display: "inline-block", whiteSpace: "nowrap", marginRight: "0.28em" }}
-        >
-          {word}
-        </motion.span>
-      ))}
-    </motion.span>
-  );
-}
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -80,9 +40,6 @@ export default function Hero() {
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
-
-  const headlineDuration =
-    0.1 + 0.3 + 0.3 + (LINE2.split(" ").length - 1) * 0.07 + 0.8;
 
   return (
     <section
@@ -168,7 +125,7 @@ export default function Hero() {
         </motion.span>
 
         <motion.h1
-          variants={linesVariants}
+          variants={fadeUpVariants}
           style={{
             fontFamily: "Cormorant Garamond, Georgia, serif",
             fontWeight: 300,
@@ -180,8 +137,8 @@ export default function Hero() {
             width: "100%",
           }}
         >
-          <StaggerLine text={LINE1} />
-          <StaggerLine text={LINE2} />
+          <span style={{ display: "block" }}>{LINE1}</span>
+          <span style={{ display: "block" }}>{LINE2}</span>
         </motion.h1>
 
         <motion.p
@@ -214,26 +171,22 @@ export default function Hero() {
             Learn Our Story
           </LiquidButton>
         </motion.div>
-      </motion.div>
 
-      <motion.button
-        onClick={() => scrollTo("meaning")}
-        aria-label="Scroll down"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, ease: EASE, delay: reduceMotion ? 0 : headlineDuration }}
-        style={{
-          position: "absolute", bottom: "1.5rem",
-          left: "50%",
-          zIndex: 10, background: "none", border: "none",
-          color: "rgba(255,255,255,0.45)", cursor: "pointer",
-          padding: "0.5rem",
-          animation: reduceMotion ? "none" : `heroBounce 2s ease-in-out ${headlineDuration}s infinite`,
-          transform: "translateX(-50%)",
-        }}
-      >
-        <ChevronDown size={22} strokeWidth={1.5} />
-      </motion.button>
+        <motion.button
+          variants={fadeUpVariants}
+          onClick={() => scrollTo("meaning")}
+          aria-label="Scroll down"
+          style={{
+            marginTop: "2.5rem",
+            background: "none", border: "none",
+            color: "rgba(255,255,255,0.45)", cursor: "pointer",
+            padding: "0.5rem",
+            animation: reduceMotion ? "none" : "heroBounce 2s ease-in-out 2s infinite",
+          }}
+        >
+          <ChevronDown size={22} strokeWidth={1.5} />
+        </motion.button>
+      </motion.div>
     </section>
   );
 }
