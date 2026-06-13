@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { motion, useAnimation } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import LiquidButton from "@/components/liquid-glass-button";
 
@@ -14,18 +15,19 @@ function BlurredStagger({ text, startDelay }: { text: string; startDelay: number
   return (
     <>
       {text.split("").map((char, i) => (
-        <span
+        <motion.span
           key={i}
-          style={{
-            display: "inline",
-            opacity: 0,
-            filter: "blur(10px)",
-            animation: `blurIn 0.35s ease forwards`,
-            animationDelay: `${startDelay + i * 0.018}s`,
+          initial={{ opacity: 0, filter: "blur(10px)" }}
+          animate={{ opacity: 1, filter: "blur(0px)" }}
+          transition={{
+            duration: 0.4,
+            ease: "easeOut",
+            delay: startDelay + i * 0.018,
           }}
+          style={{ display: "inline" }}
         >
           {char === " " ? "\u00A0" : char}
-        </span>
+        </motion.span>
       ))}
     </>
   );
@@ -48,6 +50,9 @@ export default function Hero() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Stagger delay after the headline finishes
+  const headlineDuration = 0.5 + (LINE1.length + LINE2.length) * 0.018 + 0.4;
+
   return (
     <section
       id="hero"
@@ -62,27 +67,10 @@ export default function Hero() {
       }}
     >
       <style>{`
-        @keyframes blurIn {
-          from { opacity: 0; filter: blur(10px); }
-          to   { opacity: 1; filter: blur(0px);  }
-        }
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(16px); }
-          to   { opacity: 1; transform: translateY(0);    }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to   { opacity: 1; }
-        }
         @keyframes heroBounce {
           0%, 100% { transform: translateX(-50%) translateY(0); }
           50%       { transform: translateX(-50%) translateY(7px); }
         }
-        .hero-logo    { opacity: 0; animation: fadeUp  0.8s ease forwards; animation-delay: 0.15s; }
-        .hero-eyebrow { opacity: 0; animation: fadeIn  0.7s ease forwards; animation-delay: 0.35s; }
-        .hero-sub     { opacity: 0; animation: fadeUp  0.8s ease forwards; animation-delay: 1.7s;  }
-        .hero-buttons { opacity: 0; animation: fadeUp  0.7s ease forwards; animation-delay: 1.95s; }
-        .hero-scroll  { opacity: 0; animation: fadeIn  0.8s ease forwards; animation-delay: 2.2s;  }
       `}</style>
 
       {/* Dark base */}
@@ -123,10 +111,12 @@ export default function Hero() {
       }}>
 
         {/* Logo */}
-        <img
+        <motion.img
           src={LOGO_URL}
           alt="Euodia logo"
-          className="hero-logo"
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
           style={{
             width: "clamp(3.5rem, 10vw, 5rem)",
             height: "clamp(3.5rem, 10vw, 5rem)",
@@ -137,8 +127,10 @@ export default function Hero() {
         />
 
         {/* Eyebrow */}
-        <span
-          className="hero-eyebrow"
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
           style={{
             fontFamily: "Inter Variable, Inter, sans-serif",
             fontSize: "0.68rem", letterSpacing: "0.3em",
@@ -147,9 +139,9 @@ export default function Hero() {
           }}
         >
           Euodia Songs
-        </span>
+        </motion.span>
 
-        {/* Headline — pure CSS blurred stagger */}
+        {/* Headline — blurred stagger */}
         <h1 style={{
           fontFamily: "Cormorant Garamond, Georgia, serif",
           fontWeight: 300,
@@ -163,16 +155,18 @@ export default function Hero() {
           overflowWrap: "break-word",
         }}>
           <span style={{ display: "block" }}>
-            <BlurredStagger text={LINE1} startDelay={0.5} />
+            <BlurredStagger text={LINE1} startDelay={0.45} />
           </span>
           <span style={{ display: "block" }}>
-            <BlurredStagger text={LINE2} startDelay={0.5 + LINE1.length * 0.018 + 0.05} />
+            <BlurredStagger text={LINE2} startDelay={0.45 + LINE1.length * 0.018 + 0.05} />
           </span>
         </h1>
 
         {/* Subheading */}
-        <p
-          className="hero-sub"
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: headlineDuration }}
           style={{
             fontFamily: "Inter Variable, Inter, sans-serif",
             fontWeight: 300,
@@ -185,11 +179,13 @@ export default function Hero() {
         >
           Euodia is a worship collective devoted to sharing the beauty of Christ
           through music, community, and worship.
-        </p>
+        </motion.p>
 
         {/* Buttons */}
-        <div
-          className="hero-buttons"
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: headlineDuration + 0.2 }}
           style={{
             display: "flex", flexDirection: "column",
             gap: "0.75rem", width: "100%", maxWidth: "20rem",
@@ -201,26 +197,28 @@ export default function Hero() {
           <LiquidButton onClick={() => scrollTo("meaning")}>
             Learn Our Story
           </LiquidButton>
-        </div>
+        </motion.div>
       </div>
 
       {/* Scroll indicator */}
-      <button
+      <motion.button
         onClick={() => scrollTo("meaning")}
         aria-label="Scroll down"
-        className="hero-scroll"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: headlineDuration + 0.5, duration: 0.8 }}
         style={{
           position: "absolute", bottom: "1.5rem",
           left: "50%",
           zIndex: 10, background: "none", border: "none",
           color: "rgba(255,255,255,0.45)", cursor: "pointer",
           padding: "0.5rem",
-          animation: "heroBounce 2s ease-in-out infinite, fadeIn 0.8s ease forwards 2.2s",
+          animation: `heroBounce 2s ease-in-out ${headlineDuration + 0.5}s infinite`,
           transform: "translateX(-50%)",
         }}
       >
         <ChevronDown size={22} strokeWidth={1.5} />
-      </button>
+      </motion.button>
     </section>
   );
 }
